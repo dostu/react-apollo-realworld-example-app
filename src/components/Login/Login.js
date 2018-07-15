@@ -14,11 +14,13 @@ const SIGN_IN_USER = gql`
     signInUser(input: $input) {
       token
       user {
-        id
-        email
-        username
-        bio
-        image
+        profile {
+          id
+          email
+          username
+          bio
+          image
+        }
       }
       errors {
         message
@@ -30,11 +32,13 @@ const SIGN_IN_USER = gql`
 const GET_CURRENT_USER = gql`
   query Viewer {
     viewer {
-      id
-      username
-      email
-      image
-      bio
+      profile {
+        id
+        username
+        email
+        image
+        bio
+      }
     }
   }
 `

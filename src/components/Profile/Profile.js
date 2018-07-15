@@ -47,7 +47,7 @@ const Profile = ({ username }) => (
               <h4>{profile.username}</h4>
               <p>{profile.bio}</p>
 
-              {_.get(viewer, 'id') === profile.id
+              {_.get(viewer, 'profile.id') === profile.id
                 ? <EditSettingsLink />
                 : <FollowButton user={profile} className="action-btn" />
               }

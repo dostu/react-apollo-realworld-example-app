@@ -11,9 +11,6 @@ import Form from './Form'
 const CREATE_USER = gql`
   mutation CreateUser($input: CreateUserInput!) {
     createUser(input: $input) {
-      user {
-        id
-      }
       errors {
         message
       }

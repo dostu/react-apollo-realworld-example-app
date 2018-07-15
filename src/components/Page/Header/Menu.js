@@ -7,7 +7,7 @@ const Menu = () => (
   <ul className="nav navbar-nav pull-xs-right">
     <WithViewer>
       {viewer => (
-        viewer ? <UserMenuItems viewer={viewer} /> : <GuestMenuItems />
+        viewer ? <UserMenuItems profile={viewer.profile} /> : <GuestMenuItems />
       )}
     </WithViewer>
   </ul>

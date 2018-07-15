@@ -6,11 +6,13 @@ import { Query } from 'react-apollo'
 const GET_CURRENT_USER = gql`
   query Viewer {
     viewer {
-      id
-      username
-      email
-      image
-      bio
+      profile {
+        id
+        username
+        email
+        image
+        bio
+      }
     }
   }
 `

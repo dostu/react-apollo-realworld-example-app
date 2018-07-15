@@ -17,14 +17,10 @@ const GET_ARTICLE = gql`
       title
       body
       tagList
-      ...ArticleMetaArticle
-    }
-    viewer {
-      ...ArticleMetaViewer
+      ...ArticleMeta
     }
   }
   ${ArticleMeta.fragments.article}
-  ${ArticleMeta.fragments.viewer}
 `
 
 const Article = ({ match: { params: { slug } } }) => (

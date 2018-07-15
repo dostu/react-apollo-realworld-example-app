@@ -1,4 +1,5 @@
 import gql from 'graphql-tag'
+import _ from 'lodash'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { Query } from 'react-apollo'
@@ -27,8 +28,10 @@ const ARTICLES_CONNECTION_FRAGMENT = gql`
 
 const GET_FEED = gql`
   query Feed($cursor: String) {
-    articles: feed(first: 10, after: $cursor) {
-      ...Articles
+    viewer {
+      feed(first: 10, after: $cursor) {
+        ...Articles
+      }
     }
   }
   ${ARTICLES_CONNECTION_FRAGMENT}
@@ -50,7 +53,10 @@ const Feed = ({ feedType, tag }) => (
     fetchPolicy="cache-and-network"
   >
     {({ loading, error, data, fetchMore }) => {
-      if (error || !data.articles) {
+      const connectionPath = feedType === YOUR_FEED ? 'viewer.feed' : 'articles'
+      const articles = _.get(data, connectionPath)
+
+      if (error || !articles) {
         return (
           <div className="article-preview">
             Loading feed...
@@ -58,7 +64,7 @@ const Feed = ({ feedType, tag }) => (
         )
       }
 
-      if (data.articles.edges.length === 0) {
+      if (articles.edges.length === 0) {
         return (
           <div className="article-preview">
             No articles are here... yet.
@@ -69,7 +75,7 @@ const Feed = ({ feedType, tag }) => (
       return (
         <ApolloInfiniteScroll
           data={data}
-          connectionPath="articles"
+          connectionPath={connectionPath}
           loading={loading}
           fetchMore={fetchMore}
           threshold={500}

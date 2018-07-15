@@ -4,31 +4,36 @@ import _ from 'lodash'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { Link } from 'react-router-dom'
+import WithViewer from '../WithViewer'
 import AuthorActions from './AuthorActions'
 import UserActions from './UserActions'
 
-const ArticleMeta = ({ article, viewer }) => {
+const ArticleMeta = ({ article }) => {
   const { author } = article
 
   return (
-    <div className="article-meta">
-      <Link to={`/profile/${author.username}`}>
-        <img src={author.image} alt={author.username} />
-      </Link>
-      <div className="info">
-        <Link to={`/profile/${author.username}`} className="author">
-          {author.username}
-        </Link>
-        <span className="date">
-          {format(Date.parse(article.createdAt), 'MMMM Do, YYYY')}
-        </span>
-      </div>
+    <WithViewer>
+      {viewer => (
+        <div className="article-meta">
+          <Link to={`/profile/${author.username}`}>
+            <img src={author.image} alt={author.username} />
+          </Link>
+          <div className="info">
+            <Link to={`/profile/${author.username}`} className="author">
+              {author.username}
+            </Link>
+            <span className="date">
+              {format(Date.parse(article.createdAt), 'MMMM Do, YYYY')}
+            </span>
+          </div>
 
-      {_.get(viewer, 'id') === author.id
-        ? <AuthorActions article={article} />
-        : <UserActions article={article} />
-      }
-    </div>
+          {_.get(viewer, 'profile.id') === author.id
+            ? <AuthorActions article={article} />
+            : <UserActions article={article} />
+          }
+        </div>
+      )}
+    </WithViewer>
   )
 }
 
@@ -39,19 +44,12 @@ ArticleMeta.propTypes = {
       username: PropTypes.string.isRequired,
       image: PropTypes.string
     }).isRequired
-  }).isRequired,
-  viewer: PropTypes.shape({
-    id: PropTypes.string.isRequired
-  })
-}
-
-ArticleMeta.defaultProps = {
-  viewer: null
+  }).isRequired
 }
 
 ArticleMeta.fragments = {
   article: gql`
-    fragment ArticleMetaArticle on Article {
+    fragment ArticleMeta on Article {
       favorited
       favoritesCount
       createdAt
@@ -64,13 +62,6 @@ ArticleMeta.fragments = {
           totalCount
         }
       }
-    }
-  `,
-  viewer: gql`
-    fragment ArticleMetaViewer on Viewer {
-      id
-      username
-      image
     }
   `
 }

@@ -7,7 +7,7 @@ import PopularTags from './PopularTags'
 class Content extends Component {
   constructor(props) {
     super(props)
-    this.state = { tab: props.viewer ? YOUR_FEED : GLOBAL_FEED, tag: null }
+    this.state = { tab: props.viewer ? YOUR_FEED : YOUR_FEED, tag: null }
   }
 
   handleTabSelect = (tab) => {
