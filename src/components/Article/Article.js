@@ -19,12 +19,12 @@ const GET_ARTICLE = gql`
       tagList
       ...ArticleMetaArticle
     }
-    currentUser {
-      ...ArticleMetaCurrentUser
+    viewer {
+      ...ArticleMetaViewer
     }
   }
   ${ArticleMeta.fragments.article}
-  ${ArticleMeta.fragments.currentUser}
+  ${ArticleMeta.fragments.viewer}
 `
 
 const Article = ({ match: { params: { slug } } }) => (
@@ -33,7 +33,7 @@ const Article = ({ match: { params: { slug } } }) => (
       {({ loading, error, data }) => {
         if (loading || error) return null
 
-        const { article, currentUser } = data
+        const { article, viewer } = data
 
         return (
           <Fragment>
@@ -42,7 +42,7 @@ const Article = ({ match: { params: { slug } } }) => (
             <div className="banner">
               <div className="container">
                 <h1>{article.title}</h1>
-                <ArticleMeta article={article} currentUser={currentUser} />
+                <ArticleMeta article={article} viewer={viewer} />
               </div>
             </div>
 
@@ -57,7 +57,7 @@ const Article = ({ match: { params: { slug } } }) => (
               <hr />
 
               <div className="article-actions">
-                <ArticleMeta article={article} currentUser={currentUser} />
+                <ArticleMeta article={article} viewer={viewer} />
               </div>
 
               <div className="row">

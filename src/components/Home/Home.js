@@ -1,14 +1,14 @@
 import React from 'react'
 import Page from '../Page'
-import WithCurrentUser from '../WithCurrentUser'
+import WithViewer from '../WithViewer'
 import Content from './Content'
 
 const Home = () => (
   <Page title="Home" className="home-page">
     <div className="container page">
-      <WithCurrentUser>
-        {currentUser => <Content currentUser={currentUser} />}
-      </WithCurrentUser>
+      <WithViewer>
+        {viewer => <Content viewer={viewer} />}
+      </WithViewer>
     </div>
   </Page>
 )
