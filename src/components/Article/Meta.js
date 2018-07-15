@@ -60,7 +60,9 @@ ArticleMeta.fragments = {
         username
         image
         following
-        followersCount
+        followers {
+          totalCount
+        }
       }
     }
   `,

@@ -17,7 +17,9 @@ const GET_PROFILE = gql`
       image
       bio
       following
-      followersCount
+      followers {
+        totalCount
+      }
     }
   }
 `

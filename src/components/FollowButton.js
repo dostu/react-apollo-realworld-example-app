@@ -12,7 +12,9 @@ const FOLLOW_USER = gql`
       user {
         id
         following
-        followersCount
+        followers {
+          totalCount
+        }
       }
     }
   }
@@ -24,7 +26,9 @@ const UNFOLLOW_USER = gql`
       user {
         id
         following
-        followersCount
+        followers {
+          totalCount
+        }
       }
     }
   }
@@ -53,7 +57,7 @@ const FollowButton = ({ user, className, history }) => (
             &nbsp;
             {user.following ? 'Unfollow' : 'Follow'} {user.username}
             &nbsp;
-            <span className="counter">({user.followersCount})</span>
+            <span className="counter">({user.followers.totalCount})</span>
           </button>
         )}
       </Mutation>
@@ -66,7 +70,9 @@ FollowButton.propTypes = {
     id: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
     following: PropTypes.bool.isRequired,
-    followersCount: PropTypes.number.isRequired
+    followers: PropTypes.shape({
+      totalCount: PropTypes.number.isRequired
+    }).isRequired
   }).isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired
