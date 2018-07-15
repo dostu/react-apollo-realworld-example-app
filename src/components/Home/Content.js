@@ -7,7 +7,7 @@ import PopularTags from './PopularTags'
 class Content extends Component {
   constructor(props) {
     super(props)
-    this.state = { tab: props.me ? YOUR_FEED : GLOBAL_FEED, tag: null }
+    this.state = { tab: props.currentUser ? YOUR_FEED : GLOBAL_FEED, tag: null }
   }
 
   handleTabSelect = (tab) => {
@@ -19,7 +19,7 @@ class Content extends Component {
   }
 
   render() {
-    const { me } = this.props
+    const { currentUser } = this.props
     const { tab, tag } = this.state
 
     return (
@@ -27,7 +27,7 @@ class Content extends Component {
         <div className="col-md-9">
           <div className="feed-toggle">
             <ul className="nav nav-pills outline-active">
-              {me && (
+              {currentUser && (
                 <Tab
                   active={tab === YOUR_FEED}
                   onClick={() => this.handleTabSelect(YOUR_FEED)}
@@ -64,11 +64,11 @@ class Content extends Component {
 
 Content.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
-  me: PropTypes.object
+  currentUser: PropTypes.object
 }
 
 Content.defaultProps = {
-  me: null
+  currentUser: null
 }
 
 export default Content

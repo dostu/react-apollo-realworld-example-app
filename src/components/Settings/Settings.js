@@ -9,8 +9,8 @@ import Page from '../Page'
 import SettingsForm from './Form'
 
 const GET_CURRENT_USER = gql`
-  query Me {
-    me {
+  query CurrentUser {
+    currentUser {
       id
       username
       email
@@ -52,7 +52,7 @@ const Settings = ({ history }) => (
                   <Mutation mutation={UPDATE_USER}>
                     {updateUser => (
                       <SettingsForm
-                        user={data.me}
+                        user={data.currentUser}
                         onSubmit={async (values, { setSubmitting, setErrors }) => {
                           const { data: mutationData } = await updateUser({
                             variables: { input: { values } }

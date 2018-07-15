@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import React, { Fragment } from 'react'
 import { Mutation } from 'react-apollo'
 import { Link } from 'react-router-dom'
-import WithMe from '../../WithMe'
+import WithCurrentUser from '../../WithCurrentUser'
 import Comment from './Comment'
 import CommentForm from './Form'
 
@@ -36,9 +36,9 @@ const GET_ARTICLE_COMMENTS = gql`
 `
 
 const NewComment = ({ article }) => (
-  <WithMe>
-    {(me) => {
-      if (!me) {
+  <WithCurrentUser>
+    {(currentUser) => {
+      if (!currentUser) {
         return (
           <Fragment>
             <Link to="/login">Sign in</Link> or <Link to="/register">sign up</Link>{' '}
@@ -84,7 +84,7 @@ const NewComment = ({ article }) => (
         </Mutation>
       )
     }}
-  </WithMe>
+  </WithCurrentUser>
 )
 
 NewComment.propTypes = {

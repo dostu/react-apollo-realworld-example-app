@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 import AuthorActions from './AuthorActions'
 import UserActions from './UserActions'
 
-const ArticleMeta = ({ article, me }) => {
+const ArticleMeta = ({ article, currentUser }) => {
   const { author } = article
 
   return (
@@ -24,7 +24,7 @@ const ArticleMeta = ({ article, me }) => {
         </span>
       </div>
 
-      {_.get(me, 'id') === author.id
+      {_.get(currentUser, 'id') === author.id
         ? <AuthorActions article={article} />
         : <UserActions article={article} />
       }
@@ -40,13 +40,13 @@ ArticleMeta.propTypes = {
       image: PropTypes.string
     }).isRequired
   }).isRequired,
-  me: PropTypes.shape({
+  currentUser: PropTypes.shape({
     id: PropTypes.string.isRequired
   })
 }
 
 ArticleMeta.defaultProps = {
-  me: null
+  currentUser: null
 }
 
 ArticleMeta.fragments = {
@@ -66,8 +66,8 @@ ArticleMeta.fragments = {
       }
     }
   `,
-  me: gql`
-    fragment ArticleMetaMe on User {
+  currentUser: gql`
+    fragment ArticleMetaCurrentUser on User {
       id
       username
       image

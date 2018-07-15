@@ -262,6 +262,7 @@ type Query {
     authoredBy: String
     favoritedBy: String
   ): ArticleConnection!
+  currentUser: User
   feed(
     """Returns the first _n_ elements from the list."""
     first: Int
@@ -279,7 +280,6 @@ type Query {
     """
     before: String
   ): ArticleConnection!
-  me: User
   profile(username: String!): Profile
   tags: [String!]!
 }
