@@ -7,8 +7,8 @@ import { withRouter } from 'react-router-dom'
 import WithCurrentUser from './WithCurrentUser'
 
 const FOLLOW_USER = gql`
-  mutation FollowUser($id: ID!) {
-    followUser(id: $id) {
+  mutation FollowUser($input: FollowUserInput!) {
+    followUser(input: $input) {
       user {
         id
         following
@@ -19,8 +19,8 @@ const FOLLOW_USER = gql`
 `
 
 const UNFOLLOW_USER = gql`
-  mutation UnfollowUser($id: ID!) {
-    unfollowUser(id: $id) {
+  mutation UnfollowUser($input: UnfollowUserInput!) {
+    unfollowUser(input: $input) {
       user {
         id
         following
@@ -46,7 +46,7 @@ const FollowButton = ({ user, className, history }) => (
                 history.push('/register')
                 return
               }
-              mutate({ variables: { id: user.id } })
+              mutate({ variables: { input: { id: user.id } } })
             }}
           >
             <i className="ion-plus-round" />

@@ -19,8 +19,8 @@ const GET_ARTICLE_COMMENTS = gql`
 `
 
 const DELETE_COMMENT = gql`
-  mutation DeleteComment($id: ID!) {
-    deleteComment(id: $id) {
+  mutation DeleteComment($input: DeleteCommentInput!) {
+    deleteComment(input: $input) {
       comment {
         id
       }

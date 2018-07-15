@@ -7,8 +7,8 @@ import { withRouter } from 'react-router-dom'
 import WithCurrentUser from './WithCurrentUser'
 
 const FAVORITE_ARTICLE = gql`
-  mutation FavoriteArticle($id: ID!) {
-    favoriteArticle(id: $id) {
+  mutation FavoriteArticle($input: FavoriteArticleInput!) {
+    favoriteArticle(input: $input) {
       article {
         id
         favorited
@@ -19,8 +19,8 @@ const FAVORITE_ARTICLE = gql`
 `
 
 const UNFAVORITE_ARTICLE = gql`
-  mutation UnfavoriteArticle($id: ID!) {
-    unfavoriteArticle(id: $id) {
+  mutation UnfavoriteArticle($input: UnfavoriteArticleInput!) {
+    unfavoriteArticle(input: $input) {
       article {
         id
         favorited
@@ -46,7 +46,7 @@ const FavoriteButton = ({ article, history, children, className }) => (
                 history.push('/register')
                 return
               }
-              mutate({ variables: { id: article.id } })
+              mutate({ variables: { input: { id: article.id } } })
             }}
           >
             {children}

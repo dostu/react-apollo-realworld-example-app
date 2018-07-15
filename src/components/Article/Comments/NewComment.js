@@ -9,8 +9,8 @@ import Comment from './Comment'
 import CommentForm from './Form'
 
 const ADD_COMMENT = gql`
-  mutation AddComment($articleId: ID!, $body: String!) {
-    addComment(articleId: $articleId, body: $body) {
+  mutation AddComment($input: AddCommentInput!) {
+    addComment(input: $input) {
       comment {
         ...Comment
       }
@@ -55,7 +55,7 @@ const NewComment = ({ article }) => (
 
             const cacheData = cache.readQuery({
               query: GET_ARTICLE_COMMENTS,
-              variables: { slug: article.slug }
+              variables: { input: { slug: article.slug } }
             })
             cacheData.article.comments.unshift(data.addComment.comment)
             cache.writeQuery({

@@ -8,8 +8,8 @@ import Editor from './Editor'
 import Page from './Page'
 
 const CREATE_ARTICLE = gql`
-  mutation CreateArticle($title: String!, $description: String!, $body: String!, $tagList: [String!]!) {
-    createArticle(title: $title, description: $description, body: $body, tagList: $tagList) {
+  mutation CreateArticle($input: CreateArticleInput!) {
+    createArticle(input: $input) {
       article {
         id
         slug
@@ -31,7 +31,7 @@ const NewArticle = ({ history }) => (
       <Page title="Editor" className="editor-page">
         <Editor
           onSubmit={async (values, { setSubmitting, setErrors }) => {
-            const { data } = await createArticle({ variables: values })
+            const { data } = await createArticle({ variables: { input: values } })
 
             setSubmitting(false)
             setErrors(transformGraphQLErrors(data.createArticle.errors))

@@ -5,8 +5,8 @@ import { Mutation } from 'react-apollo'
 import { Link, withRouter } from 'react-router-dom'
 
 const DELETE_ARTICLE = gql`
-  mutation DeleteArticle($id: ID!) {
-    deleteArticle(id: $id) {
+  mutation DeleteArticle($input: DeleteArticleInput!) {
+    deleteArticle(input: $input) {
       article {
         id
       }
@@ -30,7 +30,7 @@ const AuthorActions = ({ history, article }) => (
         <button
           type="button"
           className="btn btn-sm btn-outline-danger"
-          onClick={() => deleteArticle({ variables: { id: article.id } })}
+          onClick={() => deleteArticle({ variables: { input: { id: article.id } } })}
         >
           <i className="ion-trash-a" />
           &nbsp;

@@ -21,8 +21,8 @@ const GET_CURRENT_USER = gql`
 `
 
 const UPDATE_USER = gql`
-  mutation UpdateUser($email: String!, $username: String!, $bio: String, $image: String, $password: String) {
-    updateUser(email: $email, username: $username, bio: $bio, image: $image, password: $password) {
+  mutation UpdateUser($input: UpdateUserInput!) {
+    updateUser(input: $input) {
       errors {
         message
       }
@@ -54,7 +54,9 @@ const Settings = ({ history }) => (
                       <SettingsForm
                         user={data.currentUser}
                         onSubmit={async (values, { setSubmitting, setErrors }) => {
-                          const { data: mutationData } = await updateUser({ variables: values })
+                          const { data: mutationData } = await updateUser({
+                            variables: { input: { values } }
+                          })
 
                           setSubmitting(false)
                           setErrors(transformGraphQLErrors(mutationData.updateUser.errors))

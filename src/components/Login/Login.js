@@ -9,9 +9,9 @@ import tokenStorage from '../../tokenStorage'
 import Page from '../Page'
 import LoginForm from './Form'
 
-const SIGNIN_USER = gql`
-  mutation SigninUser($email: String!, $password: String!) {
-    signinUser(email: $email, password: $password) {
+const SIGN_IN_USER = gql`
+  mutation SignInUser($input: SignInUserInput!) {
+    signInUser(input: $input) {
       token
       user {
         id
@@ -49,26 +49,25 @@ const Login = ({ history }) => (
             <Link to="/register">Need an account?</Link>
           </p>
           <Mutation
-            mutation={SIGNIN_USER}
-            update={(cache, { data: { signinUser } }) => {
+            mutation={SIGN_IN_USER}
+            update={(cache, { data: { signInUser } }) => {
               cache.writeQuery({
                 query: GET_CURRENT_USER,
-                data: { currentUser: signinUser.user }
+                data: { currentUser: signInUser.user }
               })
             }}
           >
-            {signinUser => (
+            {signInUser => (
               <LoginForm
                 onSubmit={async (values, { setSubmitting, setErrors }) => {
-                  const { data: mutationData } = await signinUser({ variables: values })
+                  const { data: mutationData } = await signInUser({ variables: { input: values } })
 
                   setSubmitting(false)
-                  setErrors(transformGraphQLErrors(mutationData.signinUser.errors))
+                  setErrors(transformGraphQLErrors(mutationData.signInUser.errors))
 
-                  if (!_.isEmpty(mutationData.signinUser.errors)) return
+                  if (!_.isEmpty(mutationData.signInUser.errors)) return
 
-
-                  tokenStorage.write(mutationData.signinUser.token)
+                  tokenStorage.write(mutationData.signInUser.token)
                   history.push('/')
                 }}
               />

@@ -9,8 +9,8 @@ import Page from '../Page'
 import Form from './Form'
 
 const CREATE_USER = gql`
-  mutation CreateUser($username: String!, $email: String!, $password: String!) {
-    createUser(username: $username, email: $email, password: $password) {
+  mutation CreateUser($input: CreateUserInput!) {
+    createUser(input: $input) {
       user {
         id
       }
@@ -34,7 +34,7 @@ const Register = ({ history }) => (
             {createUser => (
               <Form
                 onSubmit={async (values, { setSubmitting, setErrors }) => {
-                  const { data } = await createUser({ variables: values })
+                  const { data } = await createUser({ variables: { input: values } })
 
                   setSubmitting(false)
                   setErrors(transformGraphQLErrors(data.createUser.errors))

@@ -21,10 +21,8 @@ const GET_ARTICLE = gql`
 `
 
 const UPDATE_ARTICLE = gql`
-  mutation UpdateArticle(
-    $id: ID!, $title: String!, $description: String!, $body: String!, $tagList: [String!]!
-  ) {
-    updateArticle(id: $id, title: $title, description: $description, body: $body, tagList: $tagList) {
+  mutation UpdateArticle($input: UpdateArticleInput!) {
+    updateArticle(input: $input) {
       article {
         id
         slug
@@ -56,7 +54,7 @@ const EditArticle = ({ history, match: { params: { slug } } }) => (
                 article={data.article}
                 onSubmit={async (values, { setSubmitting, setErrors }) => {
                   const { data: mutationData } = await updateArticle({
-                    variables: { ...values, id: data.article.id }
+                    variables: { input: { ...values, id: data.article.id } }
                   })
 
                   setSubmitting(false)
