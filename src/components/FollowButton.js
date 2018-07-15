@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { Mutation } from 'react-apollo'
 import { withRouter } from 'react-router-dom'
-import WithCurrentUser from './WithCurrentUser'
+import WithMe from './WithMe'
 
 const FOLLOW_USER = gql`
   mutation FollowUser($input: FollowUserInput!) {
@@ -31,8 +31,8 @@ const UNFOLLOW_USER = gql`
 `
 
 const FollowButton = ({ user, className, history }) => (
-  <WithCurrentUser>
-    {currentUser => (
+  <WithMe>
+    {me => (
       <Mutation mutation={user.following ? UNFOLLOW_USER : FOLLOW_USER}>
         {mutate => (
           <button
@@ -42,7 +42,7 @@ const FollowButton = ({ user, className, history }) => (
               'btn-secondary': user.following
             })}
             onClick={() => {
-              if (!currentUser) {
+              if (!me) {
                 history.push('/register')
                 return
               }
@@ -58,7 +58,7 @@ const FollowButton = ({ user, className, history }) => (
         )}
       </Mutation>
     )}
-  </WithCurrentUser>
+  </WithMe>
 )
 
 FollowButton.propTypes = {

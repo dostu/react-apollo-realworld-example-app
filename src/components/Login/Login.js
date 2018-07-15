@@ -28,8 +28,8 @@ const SIGN_IN_USER = gql`
 `
 
 const GET_CURRENT_USER = gql`
-  query CurrentUser {
-    currentUser {
+  query Me {
+    me {
       id
       username
       email
@@ -53,7 +53,7 @@ const Login = ({ history }) => (
             update={(cache, { data: { signInUser } }) => {
               cache.writeQuery({
                 query: GET_CURRENT_USER,
-                data: { currentUser: signInUser.user }
+                data: { me: signInUser.user }
               })
             }}
           >

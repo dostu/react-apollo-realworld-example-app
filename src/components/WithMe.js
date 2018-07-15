@@ -4,8 +4,8 @@ import React from 'react'
 import { Query } from 'react-apollo'
 
 const GET_CURRENT_USER = gql`
-  query CurrentUser {
-    currentUser {
+  query Me {
+    me {
       id
       username
       email
@@ -15,17 +15,17 @@ const GET_CURRENT_USER = gql`
   }
 `
 
-const WithCurrentUser = ({ children }) => (
+const WithMe = ({ children }) => (
   <Query query={GET_CURRENT_USER}>
     {({ loading, error, data }) => {
       if (loading || error) return null
-      return children(data.currentUser)
+      return children(data.me)
     }}
   </Query>
 )
 
-WithCurrentUser.propTypes = {
+WithMe.propTypes = {
   children: PropTypes.func.isRequired
 }
 
-export default WithCurrentUser
+export default WithMe

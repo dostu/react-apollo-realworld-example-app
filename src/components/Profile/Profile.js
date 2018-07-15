@@ -6,7 +6,7 @@ import { Query } from 'react-apollo'
 import { Link } from 'react-router-dom'
 import FollowButton from '../FollowButton'
 import Page from '../Page'
-import WithCurrentUser from '../WithCurrentUser'
+import WithMe from '../WithMe'
 import ArticleTabs from './ArticleTabs'
 
 const GET_PROFILE = gql`
@@ -38,20 +38,20 @@ const Profile = ({ username }) => (
       const { profile } = data
 
       return (
-        <WithCurrentUser>
-          {currentUser => (
+        <WithMe>
+          {me => (
             <Fragment>
               <img src={profile.image} className="user-img" alt="" />
               <h4>{profile.username}</h4>
               <p>{profile.bio}</p>
 
-              {_.get(currentUser, 'id') === profile.id
+              {_.get(me, 'id') === profile.id
                 ? <EditSettingsLink />
                 : <FollowButton user={profile} className="action-btn" />
               }
             </Fragment>
           )}
-        </WithCurrentUser>
+        </WithMe>
       )
     }}
   </Query>

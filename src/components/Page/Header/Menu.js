@@ -1,15 +1,15 @@
 import React from 'react'
-import WithCurrentUser from '../../WithCurrentUser'
+import WithMe from '../../WithMe'
 import GuestMenuItems from './GuestMenuItems'
 import UserMenuItems from './UserMenuItems'
 
 const Menu = () => (
   <ul className="nav navbar-nav pull-xs-right">
-    <WithCurrentUser>
-      {currentUser => (
-        currentUser ? <UserMenuItems currentUser={currentUser} /> : <GuestMenuItems />
+    <WithMe>
+      {me => (
+        me ? <UserMenuItems me={me} /> : <GuestMenuItems />
       )}
-    </WithCurrentUser>
+    </WithMe>
   </ul>
 )
 

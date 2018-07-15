@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { Mutation } from 'react-apollo'
 import { withRouter } from 'react-router-dom'
-import WithCurrentUser from './WithCurrentUser'
+import WithMe from './WithMe'
 
 const FAVORITE_ARTICLE = gql`
   mutation FavoriteArticle($input: FavoriteArticleInput!) {
@@ -31,8 +31,8 @@ const UNFAVORITE_ARTICLE = gql`
 `
 
 const FavoriteButton = ({ article, history, children, className }) => (
-  <WithCurrentUser>
-    {currentUser => (
+  <WithMe>
+    {me => (
       <Mutation mutation={article.favorited ? UNFAVORITE_ARTICLE : FAVORITE_ARTICLE}>
         {mutate => (
           <button
@@ -42,7 +42,7 @@ const FavoriteButton = ({ article, history, children, className }) => (
               'btn-primary': article.favorited
             })}
             onClick={() => {
-              if (!currentUser) {
+              if (!me) {
                 history.push('/register')
                 return
               }
@@ -54,7 +54,7 @@ const FavoriteButton = ({ article, history, children, className }) => (
         )}
       </Mutation>
     )}
-  </WithCurrentUser>
+  </WithMe>
 )
 
 FavoriteButton.propTypes = {
