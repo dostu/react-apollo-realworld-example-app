@@ -18,14 +18,14 @@ const USER_FRAGMENT = gql`
   }
 `
 
-const GET_CURRENT_USER = gql`
+const GET_VIEWER = gql`
   query Viewer {
     viewer {
       user {
         ...User
       }
     }
-  },
+  }
   ${USER_FRAGMENT}
 `
 
@@ -39,7 +39,7 @@ const UPDATE_USER = gql`
         ...User
       }
     }
-  },
+  }
   ${USER_FRAGMENT}
 `
 
@@ -49,7 +49,7 @@ const Settings = ({ history }) => (
       <div className="row">
         <div className="col-md-6 offset-md-3 col-xs-12">
           <h1 className="text-xs-center">Your Settings</h1>
-          <Query query={GET_CURRENT_USER}>
+          <Query query={GET_VIEWER}>
             {({ loading, error, data, client }) => {
               if (loading || error) return 'Loading...'
 

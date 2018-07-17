@@ -50,19 +50,15 @@ ArticleMeta.propTypes = {
 ArticleMeta.fragments = {
   article: gql`
     fragment ArticleMeta on Article {
-      viewerHasFavorited
-      favoritesCount
       createdAt
       author {
         id
         username
         image
-        followedByViewer
-        followers {
-          totalCount
-        }
       }
+      ...UserActions
     }
+    ${UserActions.fragments.article}
   `
 }
 

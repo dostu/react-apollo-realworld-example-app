@@ -16,12 +16,10 @@ const GET_PROFILE = gql`
       username
       image
       bio
-      followedByViewer
-      followers {
-        totalCount
-      }
+      ...FollowButton
     }
   }
+  ${FollowButton.fragments.user}
 `
 
 const EditSettingsLink = () => (

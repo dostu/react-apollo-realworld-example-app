@@ -40,8 +40,8 @@ ArticlePreview.propTypes = {
     slug: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    createdAt: PropTypes.string.isRequired,
     favoritesCount: PropTypes.number.isRequired,
+    createdAt: PropTypes.string.isRequired,
     author: PropTypes.shape({
       username: PropTypes.string.isRequired,
       image: PropTypes.string
@@ -56,7 +56,6 @@ ArticlePreview.fragments = {
       slug
       title
       description
-      viewerHasFavorited
       favoritesCount
       createdAt
       author {
@@ -64,7 +63,9 @@ ArticlePreview.fragments = {
         username
         image
       }
+      ...FavoriteButton
     }
+    ${FavoriteButton.fragments.article}
   `
 }
 

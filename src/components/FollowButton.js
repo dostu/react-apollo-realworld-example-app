@@ -85,4 +85,17 @@ FollowButton.defaultProps = {
   className: null
 }
 
+FollowButton.fragments = {
+  user: gql`
+    fragment FollowButton on User {
+      id
+      username
+      followedByViewer
+      followers {
+        totalCount
+      }
+    }
+  `
+}
+
 export default withRouter(FollowButton)

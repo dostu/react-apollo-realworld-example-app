@@ -75,4 +75,15 @@ FavoriteButton.defaultProps = {
   className: null
 }
 
+FavoriteButton.fragments = {
+  article: gql`
+    fragment FavoriteButton on Article {
+      id
+      viewerHasFavorited
+      favoritesCount
+    }
+  `
+}
+
+
 export default withRouter(FavoriteButton)

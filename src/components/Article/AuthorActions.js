@@ -42,12 +42,12 @@ const AuthorActions = ({ history, article }) => (
 )
 
 AuthorActions.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired
-  }).isRequired,
   article: PropTypes.shape({
     id: PropTypes.string.isRequired,
     slug: PropTypes.string.isRequired
+  }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired
   }).isRequired
 }
 

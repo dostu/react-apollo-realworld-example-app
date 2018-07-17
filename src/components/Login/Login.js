@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 import { transformGraphQLErrors } from '../../apolloHelpers'
 import tokenStorage from '../../tokenStorage'
 import Page from '../Page'
+import WithViewer from '../WithViewer'
 import LoginForm from './Form'
 
 const SIGN_IN_USER = gql`
@@ -14,33 +15,23 @@ const SIGN_IN_USER = gql`
     signInUser(input: $input) {
       token
       viewer {
-        user {
-          id
-          email
-          username
-          bio
-          image
-        }
+        ...WithViewer
       }
       errors {
         message
       }
     }
   }
+  ${WithViewer.fragments.viewer}
 `
 
-const GET_CURRENT_USER = gql`
+const GET_VIEWER = gql`
   query Viewer {
     viewer {
-      user {
-        id
-        username
-        email
-        image
-        bio
-      }
+      ...WithViewer
     }
   }
+  ${WithViewer.fragments.viewer}
 `
 
 const Login = ({ history }) => (
@@ -54,10 +45,10 @@ const Login = ({ history }) => (
           </p>
           <Mutation
             mutation={SIGN_IN_USER}
-            update={(cache, { data: { signInUser } }) => {
+            update={(cache, { data: mutationData }) => {
               cache.writeQuery({
-                query: GET_CURRENT_USER,
-                data: { viewer: signInUser.viewer }
+                query: GET_VIEWER,
+                data: { viewer: mutationData.signInUser.viewer }
               })
             }}
           >

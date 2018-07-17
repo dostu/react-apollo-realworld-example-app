@@ -21,7 +21,7 @@ const ARTICLES_CONNECTION_FRAGMENT = gql`
       endCursor
       hasNextPage
     }
-  },
+  }
   ${ArticlePreview.fragments.article}
 `
 
@@ -33,7 +33,7 @@ const GET_USER_ARTICLES = gql`
         ...Articles
       }
     }
-  },
+  }
   ${ARTICLES_CONNECTION_FRAGMENT}
 `
 
@@ -45,7 +45,7 @@ const GET_FAVORITE_ARTICLES = gql`
         ...Articles
       }
     }
-  },
+  }
   ${ARTICLES_CONNECTION_FRAGMENT}
 `
 

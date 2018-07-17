@@ -22,7 +22,7 @@ const ARTICLES_CONNECTION_FRAGMENT = gql`
       endCursor
       hasNextPage
     }
-  },
+  }
   ${ArticlePreview.fragments.article}
 `
 
