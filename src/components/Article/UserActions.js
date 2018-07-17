@@ -10,14 +10,14 @@ const UserActions = ({ article }) => (
     <FavoriteButton article={article}>
       <i className="ion-heart" />
       &nbsp;
-      {article.favorited ? 'Unfavorite' : 'Favorite'} Article ({article.favoritesCount})
+      {article.viewerHasFavorited ? 'Unfavorite' : 'Favorite'} Article ({article.favoritesCount})
     </FavoriteButton>
   </Fragment>
 )
 
 UserActions.propTypes = {
   article: PropTypes.shape({
-    favorited: PropTypes.bool.isRequired,
+    viewerHasFavorited: PropTypes.bool.isRequired,
     favoritesCount: PropTypes.number.isRequired,
     author: PropTypes.object.isRequired
   }).isRequired

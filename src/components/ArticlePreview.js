@@ -56,7 +56,7 @@ ArticlePreview.fragments = {
       slug
       title
       description
-      favorited
+      viewerHasFavorited
       favoritesCount
       createdAt
       author {

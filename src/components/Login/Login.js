@@ -13,8 +13,8 @@ const SIGN_IN_USER = gql`
   mutation SignInUser($input: SignInUserInput!) {
     signInUser(input: $input) {
       token
-      user {
-        profile {
+      viewer {
+        user {
           id
           email
           username
@@ -32,7 +32,7 @@ const SIGN_IN_USER = gql`
 const GET_CURRENT_USER = gql`
   query Viewer {
     viewer {
-      profile {
+      user {
         id
         username
         email
@@ -57,7 +57,7 @@ const Login = ({ history }) => (
             update={(cache, { data: { signInUser } }) => {
               cache.writeQuery({
                 query: GET_CURRENT_USER,
-                data: { viewer: signInUser.user }
+                data: { viewer: signInUser.viewer }
               })
             }}
           >

@@ -27,7 +27,7 @@ const ArticleMeta = ({ article }) => {
             </span>
           </div>
 
-          {_.get(viewer, 'profile.id') === author.id
+          {_.get(viewer, 'user.id') === author.id
             ? <AuthorActions article={article} />
             : <UserActions article={article} />
           }
@@ -50,14 +50,14 @@ ArticleMeta.propTypes = {
 ArticleMeta.fragments = {
   article: gql`
     fragment ArticleMeta on Article {
-      favorited
+      viewerHasFavorited
       favoritesCount
       createdAt
       author {
         id
         username
         image
-        following
+        followedByViewer
         followers {
           totalCount
         }

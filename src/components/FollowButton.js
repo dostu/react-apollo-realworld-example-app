@@ -11,7 +11,7 @@ const FOLLOW_USER = gql`
     followUser(input: $input) {
       user {
         id
-        following
+        followedByViewer
         followers {
           totalCount
         }
@@ -25,7 +25,7 @@ const UNFOLLOW_USER = gql`
     unfollowUser(input: $input) {
       user {
         id
-        following
+        followedByViewer
         followers {
           totalCount
         }
@@ -37,14 +37,15 @@ const UNFOLLOW_USER = gql`
 const FollowButton = ({ user, className, history }) => (
   <WithViewer>
     {viewer => (
-      <Mutation mutation={user.following ? UNFOLLOW_USER : FOLLOW_USER}>
+      <Mutation mutation={user.followedByViewer ? UNFOLLOW_USER : FOLLOW_USER}>
         {mutate => (
           <button
             type="button"
-            className={classNames('btn btn-sm', className, {
-              'btn-outline-secondary': !user.following,
-              'btn-secondary': user.following
-            })}
+            className={classNames(
+              'btn btn-sm',
+              user.followedByViewer ? 'btn-secondary' : 'btn-outline-secondary',
+              className
+            )}
             onClick={() => {
               if (!viewer) {
                 history.push('/register')
@@ -55,7 +56,7 @@ const FollowButton = ({ user, className, history }) => (
           >
             <i className="ion-plus-round" />
             &nbsp;
-            {user.following ? 'Unfollow' : 'Follow'} {user.username}
+            {user.followedByViewer ? 'Unfollow' : 'Follow'} {user.username}
             &nbsp;
             <span className="counter">({user.followers.totalCount})</span>
           </button>
@@ -69,7 +70,7 @@ FollowButton.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
-    following: PropTypes.bool.isRequired,
+    followedByViewer: PropTypes.bool.isRequired,
     followers: PropTypes.shape({
       totalCount: PropTypes.number.isRequired
     }).isRequired

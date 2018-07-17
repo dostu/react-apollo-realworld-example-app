@@ -6,7 +6,7 @@ import { Query } from 'react-apollo'
 const GET_CURRENT_USER = gql`
   query Viewer {
     viewer {
-      profile {
+      user {
         id
         username
         email

@@ -1,4 +1,5 @@
 import gql from 'graphql-tag'
+import _ from 'lodash'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { Query } from 'react-apollo'
@@ -8,32 +9,56 @@ import ArticlePreview from '../ArticlePreview'
 export const MY_ARTICLES = 'MY_ARTICLES'
 export const FAVORITED_ARTICLES = 'FAVORITED_ARTICLES'
 
-const GET_USER_ARTICLES = gql`
-  query UserArticles($authoredBy: String, $favoritedBy: String, $cursor: String) {
-    articles(authoredBy: $authoredBy, favoritedBy: $favoritedBy, first: 10, after: $cursor) {
-      edges {
-        node {
-          id
-          ...ArticlePreview
-        }
+const ARTICLES_CONNECTION_FRAGMENT = gql`
+  fragment Articles on ArticleConnection {
+    edges {
+      node {
+        id
+        ...ArticlePreview
       }
-      pageInfo {
-        endCursor
-        hasNextPage
-      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
     }
   },
   ${ArticlePreview.fragments.article}
 `
 
+const GET_USER_ARTICLES = gql`
+  query UserArticles($username: String!, $cursor: String) {
+    user(username: $username) {
+      id
+      articles(first: 10, after: $cursor) {
+        ...Articles
+      }
+    }
+  },
+  ${ARTICLES_CONNECTION_FRAGMENT}
+`
+
+const GET_FAVORITE_ARTICLES = gql`
+  query FavoriteArticles($username: String!, $cursor: String) {
+    user(username: $username) {
+      id
+      articles: favoriteArticles(first: 10, after: $cursor) {
+        ...Articles
+      }
+    }
+  },
+  ${ARTICLES_CONNECTION_FRAGMENT}
+`
+
 const UserArticles = ({ username, type }) => (
   <Query
-    query={GET_USER_ARTICLES}
-    variables={type === FAVORITED_ARTICLES ? { favoritedBy: username } : { authoredBy: username }}
+    query={type === FAVORITED_ARTICLES ? GET_FAVORITE_ARTICLES : GET_USER_ARTICLES}
+    variables={{ username }}
     fetchPolicy="cache-and-network"
   >
     {({ loading, error, data, fetchMore }) => {
-      if (error || !data.articles) {
+      const articles = _.get(data, 'user.articles')
+
+      if (error || !articles) {
         return (
           <div className="article-preview">
             Loading articles...
@@ -41,7 +66,7 @@ const UserArticles = ({ username, type }) => (
         )
       }
 
-      if (data.articles.edges.length === 0) {
+      if (articles.edges.length === 0) {
         return (
           <div className="article-preview">
             No articles are here... yet.
@@ -52,7 +77,7 @@ const UserArticles = ({ username, type }) => (
       return (
         <ApolloInfiniteScroll
           data={data}
-          connectionPath="articles"
+          connectionPath="user.articles"
           loading={loading}
           fetchMore={fetchMore}
           threshold={500}

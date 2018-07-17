@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React, { Fragment } from 'react'
 import { NavLink } from 'react-router-dom'
 
-const UserMenuItems = ({ profile }) => (
+const UserMenuItems = ({ user }) => (
   <Fragment>
     <li className="nav-item">
       <NavLink exact to="/" className="nav-link">Home</NavLink>
@@ -18,16 +18,16 @@ const UserMenuItems = ({ profile }) => (
       </NavLink>
     </li>
     <li className="nav-item">
-      <NavLink to={`/profile/${profile.username}`} className="nav-link">
-        <img src={profile.image} className="user-pic" alt="" />
-        {profile.username}
+      <NavLink to={`/profile/${user.username}`} className="nav-link">
+        <img src={user.image} className="user-pic" alt="" />
+        {user.username}
       </NavLink>
     </li>
   </Fragment>
 )
 
 UserMenuItems.propTypes = {
-  profile: PropTypes.shape({
+  user: PropTypes.shape({
     username: PropTypes.string.isRequired,
     image: PropTypes.string
   }).isRequired

@@ -11,7 +11,7 @@ const FAVORITE_ARTICLE = gql`
     favoriteArticle(input: $input) {
       article {
         id
-        favorited
+        viewerHasFavorited
         favoritesCount
       }
     }
@@ -23,7 +23,7 @@ const UNFAVORITE_ARTICLE = gql`
     unfavoriteArticle(input: $input) {
       article {
         id
-        favorited
+        viewerHasFavorited
         favoritesCount
       }
     }
@@ -33,14 +33,15 @@ const UNFAVORITE_ARTICLE = gql`
 const FavoriteButton = ({ article, history, children, className }) => (
   <WithViewer>
     {viewer => (
-      <Mutation mutation={article.favorited ? UNFAVORITE_ARTICLE : FAVORITE_ARTICLE}>
+      <Mutation mutation={article.viewerHasFavorited ? UNFAVORITE_ARTICLE : FAVORITE_ARTICLE}>
         {mutate => (
           <button
             type="button"
-            className={classNames('btn btn-sm', className, {
-              'btn-outline-primary': !article.favorited,
-              'btn-primary': article.favorited
-            })}
+            className={classNames(
+              'btn btn-sm',
+              article.viewerHasFavorited ? 'btn-primary' : 'btn-outline-primary',
+              className
+            )}
             onClick={() => {
               if (!viewer) {
                 history.push('/register')
@@ -60,7 +61,7 @@ const FavoriteButton = ({ article, history, children, className }) => (
 FavoriteButton.propTypes = {
   article: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    favorited: PropTypes.bool.isRequired,
+    viewerHasFavorited: PropTypes.bool.isRequired,
     favoritesCount: PropTypes.number.isRequired
   }).isRequired,
   history: PropTypes.shape({

@@ -8,26 +8,25 @@ import tokenStorage from '../../tokenStorage'
 import Page from '../Page'
 import SettingsForm from './Form'
 
-const PROFILE_FRAGMENT = gql`
-  fragment Profile on Profile {
-      id
-      username
-      email
-      image
-      bio
+const USER_FRAGMENT = gql`
+  fragment User on User {
+    id
+    username
+    email
+    image
+    bio
   }
 `
-
 
 const GET_CURRENT_USER = gql`
   query Viewer {
     viewer {
-      profile {
-        ...Profile
+      user {
+        ...User
       }
     }
   },
-  ${PROFILE_FRAGMENT}
+  ${USER_FRAGMENT}
 `
 
 const UPDATE_USER = gql`
@@ -37,13 +36,11 @@ const UPDATE_USER = gql`
         message
       }
       user {
-        profile {
-          ...Profile
-        }
+        ...User
       }
     }
   },
-  ${PROFILE_FRAGMENT}
+  ${USER_FRAGMENT}
 `
 
 const Settings = ({ history }) => (
@@ -61,7 +58,7 @@ const Settings = ({ history }) => (
                   <Mutation mutation={UPDATE_USER}>
                     {updateUser => (
                       <SettingsForm
-                        user={data.viewer.profile}
+                        user={data.viewer.user}
                         onSubmit={async (values, { setSubmitting, setErrors }) => {
                           const { data: mutationData } = await updateUser({
                             variables: { input: values }
@@ -72,7 +69,7 @@ const Settings = ({ history }) => (
 
                           if (!_.isEmpty(mutationData.updateUser.errors)) return
 
-                          history.push(`/profile/${mutationData.updateUser.user.profile.username}`)
+                          history.push(`/profile/${mutationData.updateUser.user.username}`)
                         }}
                       />
                     )}

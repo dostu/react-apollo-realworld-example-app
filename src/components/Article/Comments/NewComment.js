@@ -55,7 +55,7 @@ const NewComment = ({ article }) => (
 
             const cacheData = cache.readQuery({
               query: GET_ARTICLE_COMMENTS,
-              variables: { input: { slug: article.slug } }
+              variables: { slug: article.slug }
             })
             cacheData.article.comments.unshift(data.addComment.comment)
             cache.writeQuery({
@@ -69,7 +69,7 @@ const NewComment = ({ article }) => (
             <CommentForm
               onSubmit={async (values, { setSubmitting, resetForm }) => {
                 const { data } = await addComment({
-                  variables: { ...values, articleId: article.id }
+                  variables: { input: { ...values, articleId: article.id } }
                 })
 
                 if (!_.isEmpty(data.addComment.errors)) {

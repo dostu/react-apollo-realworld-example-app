@@ -11,12 +11,12 @@ import ArticleTabs from './ArticleTabs'
 
 const GET_PROFILE = gql`
   query Profile($username: String!) {
-    profile(username: $username) {
+    user(username: $username) {
       id
       username
       image
       bio
-      following
+      followedByViewer
       followers {
         totalCount
       }
@@ -37,19 +37,19 @@ const Profile = ({ username }) => (
     {({ loading, error, data }) => {
       if (loading || error) return null
 
-      const { profile } = data
+      const { user } = data
 
       return (
         <WithViewer>
           {viewer => (
             <Fragment>
-              <img src={profile.image} className="user-img" alt="" />
-              <h4>{profile.username}</h4>
-              <p>{profile.bio}</p>
+              <img src={user.image} className="user-img" alt="" />
+              <h4>{user.username}</h4>
+              <p>{user.bio}</p>
 
-              {_.get(viewer, 'profile.id') === profile.id
+              {_.get(viewer, 'user.id') === user.id
                 ? <EditSettingsLink />
-                : <FollowButton user={profile} className="action-btn" />
+                : <FollowButton user={user} className="action-btn" />
               }
             </Fragment>
           )}

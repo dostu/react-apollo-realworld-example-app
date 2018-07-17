@@ -44,7 +44,7 @@ const ArticleComments = ({ slug }) => (
               onDelete={async () => {
                 const result = await client.mutate({
                   mutation: DELETE_COMMENT,
-                  variables: { id: comment.id }
+                  variables: { input: { id: comment.id } }
                 })
                 const deletedCommentId = result.data.deleteComment.comment.id
                 const cacheData = client.readQuery({
