@@ -16,6 +16,7 @@
     "immutability-helper": "^2.7.1",
     "lodash": "^4.17.10",
     "prop-types": "^15.6.2",
+    "raven-js": "^3.26.3",
     "react": "^16.4.1",
     "react-apollo": "^2.1.9",
     "react-dom": "^16.4.1",

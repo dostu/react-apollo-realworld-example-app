@@ -1,6 +1,6 @@
 # ![RealWorld Example App](logo.png)
 
-> ### React Apollo codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/gothinkster/realworld) spec and GraphQL API.
+> ### React + Apollo codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/gothinkster/realworld) spec and GraphQL API.
 
 ### [Demo](https://realworld-react-apollo.herokuapp.com/)&nbsp;&nbsp;&nbsp;&nbsp;[RealWorld](https://github.com/gothinkster/realworld)
 
