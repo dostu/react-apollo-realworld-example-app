@@ -18,9 +18,9 @@ const GET_FEED_FILTER = gql`
 /* eslint-enable */
 
 /* eslint-disable graphql/template-strings */
-const SET_FEED_FILTER = gql`
-  mutation SetFeedFilter($type: String) {
-    setFeedFilter(type: $type) @client
+const CHANGE_FEED_FILTER = gql`
+  mutation ChangeFeedFilter($type: String) {
+    changeFeedFilter(type: $type) @client
   }
 `
 /* eslint-enable */
@@ -38,13 +38,13 @@ const FeedTabs = () => (
           return (
             <Fragment>
               <div className="feed-toggle">
-                <Mutation mutation={SET_FEED_FILTER}>
-                  {setFeedFilter => (
+                <Mutation mutation={CHANGE_FEED_FILTER}>
+                  {changeFeedFilter => (
                     <ul className="nav nav-pills outline-active">
                       {viewer && (
                         <Tab
                           active={feedType === YOUR_FEED}
-                          onClick={() => setFeedFilter({ variables: { type: YOUR_FEED } })}
+                          onClick={() => changeFeedFilter({ variables: { type: YOUR_FEED } })}
                         >
                           Your Feed
                         </Tab>
@@ -52,7 +52,7 @@ const FeedTabs = () => (
 
                       <Tab
                         active={feedType === GLOBAL_FEED}
-                        onClick={() => setFeedFilter({ variables: { type: GLOBAL_FEED } })}
+                        onClick={() => changeFeedFilter({ variables: { type: GLOBAL_FEED } })}
                       >
                         Global Feed
                       </Tab>

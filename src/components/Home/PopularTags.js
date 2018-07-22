@@ -11,9 +11,9 @@ const GET_TAGS = gql`
 `
 
 /* eslint-disable graphql/template-strings */
-const SET_FEED_FILTER = gql`
-  mutation SetFeedFilter($type: String, $tag: String) {
-    setFeedFilter(type: $type, tag: $tag) @client
+const CHANGE_FEED_FILTER = gql`
+  mutation ChangeFeedFilter($type: String, $tag: String) {
+    changeFeedFilter(type: $type, tag: $tag) @client
   }
 `
 /* eslint-enable */
@@ -29,13 +29,13 @@ const PopularTags = () => (
         if (loading || error) return 'Loading tags...'
 
         return (
-          <Mutation mutation={SET_FEED_FILTER}>
-            {setFeedFilter => (
+          <Mutation mutation={CHANGE_FEED_FILTER}>
+            {changeFeedFilter => (
               <div className="tag-list">
                 {data.tags.map(tag => (
                   <Tag
                     key={tag}
-                    onClick={() => setFeedFilter({ variables: { type: TAG_FEED, tag } })}
+                    onClick={() => changeFeedFilter({ variables: { type: TAG_FEED, tag } })}
                   >
                     {tag}
                   </Tag>

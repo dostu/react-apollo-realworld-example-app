@@ -7,9 +7,9 @@ import FeedTabs from './FeedTabs'
 import PopularTags from './PopularTags'
 
 /* eslint-disable graphql/template-strings */
-const SET_FEED_FILTER = gql`
-  mutation SetFeedFilter($type: String) {
-    setFeedFilter(type: $type) @client
+const CHANGE_FEED_FILTER = gql`
+  mutation ChangeFeedFilter($type: String) {
+    changeFeedFilter(type: $type) @client
   }
 `
 /* eslint-enable */
@@ -19,7 +19,7 @@ class Home extends Component {
     const { client } = this.props
 
     client.mutate({
-      mutation: SET_FEED_FILTER,
+      mutation: CHANGE_FEED_FILTER,
       variables: { type: null }
     })
   }

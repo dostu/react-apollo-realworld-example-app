@@ -13,7 +13,7 @@ const clientState = {
   },
   resolvers: {
     Mutation: {
-      setFeedFilter: (_, { type, tag = null }, { cache }) => {
+      changeFeedFilter: (_, { type, tag = null }, { cache }) => {
         const feedFilter = { __typename: 'FeedFilter', type, tag }
         cache.writeData({ data: { feedFilter } })
         return feedFilter

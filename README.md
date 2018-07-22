@@ -18,7 +18,7 @@ To get the frontend running locally:
 
 ### Making requests to the backend API
 
-For convenience, we have a live GraphQL API server running at https://realworld-graphql.herokuapp.com for the application to make requests against. You can view [the GraphQL API spec here](https://github.com/dostu/rails-graphql-realworld-example-app/blob/master/GRAPHQL_API_SPEC.md) which contains the schema for the server.
+For convenience, we have a live GraphQL API server running at https://realworld-graphql.herokuapp.com/graphql for the application to make requests against. You can view [the GraphQL API spec here](https://github.com/dostu/rails-graphql-realworld-example-app/blob/master/GRAPHQL_API_SPEC.md) which contains the schema for the server.
 
 The source code for the backend server (available for Ruby on Rails) can be found in the [this repo](https://github.com/dostu/rails-graphql-realworld-example-app).
 
