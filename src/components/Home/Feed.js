@@ -5,10 +5,7 @@ import React from 'react'
 import { Query } from 'react-apollo'
 import ApolloInfiniteScroll from '../ApolloInfiniteScroll'
 import ArticlePreview from '../ArticlePreview'
-
-export const YOUR_FEED = 'YOUR_FEED'
-export const GLOBAL_FEED = 'GLOBAL_FEED'
-export const TAG_FEED = 'TAG_FEED'
+import { GLOBAL_FEED, TAG_FEED, YOUR_FEED } from './feedTypes'
 
 const ARTICLES_CONNECTION_FRAGMENT = gql`
   fragment Articles on ArticleConnection {

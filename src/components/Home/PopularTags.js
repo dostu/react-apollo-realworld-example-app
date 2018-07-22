@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import PropTypes from 'prop-types'
 import React, { Fragment } from 'react'
-import { Query } from 'react-apollo'
+import { Mutation, Query } from 'react-apollo'
 import Tag from './Tag'
+import { TAG_FEED } from './feedTypes'
 
 const GET_TAGS = gql`
   query Tags {
@@ -10,7 +10,15 @@ const GET_TAGS = gql`
   }
 `
 
-const PopularTags = ({ onTagClick }) => (
+/* eslint-disable graphql/template-strings */
+const SET_FEED_FILTER = gql`
+  mutation SetFeedFilter($type: String, $tag: String) {
+    setFeedFilter(type: $type, tag: $tag) @client
+  }
+`
+/* eslint-enable */
+
+const PopularTags = () => (
   <Fragment>
     <p>Popular Tags</p>
     <Query
@@ -21,24 +29,24 @@ const PopularTags = ({ onTagClick }) => (
         if (loading || error) return 'Loading tags...'
 
         return (
-          <div className="tag-list">
-            {data.tags.map(tag => (
-              <Tag
-                key={tag}
-                onClick={() => onTagClick(tag)}
-              >
-                {tag}
-              </Tag>
-            ))}
-          </div>
+          <Mutation mutation={SET_FEED_FILTER}>
+            {setFeedFilter => (
+              <div className="tag-list">
+                {data.tags.map(tag => (
+                  <Tag
+                    key={tag}
+                    onClick={() => setFeedFilter({ variables: { type: TAG_FEED, tag } })}
+                  >
+                    {tag}
+                  </Tag>
+                ))}
+              </div>
+            )}
+          </Mutation>
         )
       }}
     </Query>
   </Fragment>
 )
-
-PopularTags.propTypes = {
-  onTagClick: PropTypes.func.isRequired
-}
 
 export default PopularTags

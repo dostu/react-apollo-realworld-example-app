@@ -1,16 +1,54 @@
-import React from 'react'
+import gql from 'graphql-tag'
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
+import { withApollo } from 'react-apollo'
 import Page from '../Page'
-import WithViewer from '../WithViewer'
-import Content from './Content'
+import FeedTabs from './FeedTabs'
+import PopularTags from './PopularTags'
 
-const Home = () => (
-  <Page title="Home" className="home-page">
-    <div className="container page">
-      <WithViewer>
-        {viewer => <Content viewer={viewer} />}
-      </WithViewer>
-    </div>
-  </Page>
-)
+/* eslint-disable graphql/template-strings */
+const SET_FEED_FILTER = gql`
+  mutation SetFeedFilter($type: String) {
+    setFeedFilter(type: $type) @client
+  }
+`
+/* eslint-enable */
 
-export default Home
+class Home extends Component {
+  componentWillUnmount() {
+    const { client } = this.props
+
+    client.mutate({
+      mutation: SET_FEED_FILTER,
+      variables: { type: null }
+    })
+  }
+
+  render() {
+    return (
+      <Page title="Home" className="home-page">
+        <div className="container page">
+          <div className="row">
+            <div className="col-md-9">
+              <FeedTabs />
+            </div>
+
+            <div className="col-md-3">
+              <div className="sidebar">
+                <PopularTags />
+              </div>
+            </div>
+          </div>
+        </div>
+      </Page>
+    )
+  }
+}
+
+Home.propTypes = {
+  client: PropTypes.shape({
+    mutate: PropTypes.func.isRequired
+  }).isRequired
+}
+
+export default withApollo(Home)
