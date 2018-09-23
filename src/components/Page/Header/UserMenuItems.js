@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { Fragment } from 'react'
 import { NavLink } from 'react-router-dom'
+import Avatar from '../../Avatar'
 
 const UserMenuItems = ({ user }) => (
   <Fragment>
@@ -19,7 +20,7 @@ const UserMenuItems = ({ user }) => (
     </li>
     <li className="nav-item">
       <NavLink to={`/profile/${user.username}`} className="nav-link">
-        <img src={user.image} className="user-pic" alt="" />
+        <Avatar src={user.image} className="user-pic" alt="" />
         {user.username}
       </NavLink>
     </li>

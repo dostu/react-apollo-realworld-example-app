@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import React, { Fragment } from 'react'
 import { Query } from 'react-apollo'
 import { Link } from 'react-router-dom'
+import Avatar from '../Avatar'
 import FollowButton from '../FollowButton'
 import Page from '../Page'
 import WithViewer from '../WithViewer'
@@ -41,7 +42,7 @@ const Profile = ({ username }) => (
         <WithViewer>
           {viewer => (
             <Fragment>
-              <img src={user.image} className="user-img" alt="" />
+              <Avatar src={user.image} className="user-img" alt="" />
               <h4>{user.username}</h4>
               <p>{user.bio}</p>
 

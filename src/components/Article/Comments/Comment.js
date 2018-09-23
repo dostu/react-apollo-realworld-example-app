@@ -3,6 +3,7 @@ import gql from 'graphql-tag'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { Link } from 'react-router-dom'
+import Avatar from '../../Avatar'
 
 const Comment = ({ comment, onDelete }) => {
   const { author } = comment
@@ -13,7 +14,7 @@ const Comment = ({ comment, onDelete }) => {
       </div>
       <div className="card-footer">
         <Link to={`/profile/${author.username}`} className="comment-author">
-          <img src={author.image} className="comment-author-img" alt={author.username} />
+          <Avatar src={author.image} className="comment-author-img" alt={author.username} />
         </Link>
         &nbsp;
         <Link to={`/profile/${author.username}`} className="comment-author">

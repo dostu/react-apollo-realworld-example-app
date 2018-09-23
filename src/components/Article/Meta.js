@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 import WithViewer from '../WithViewer'
 import AuthorActions from './AuthorActions'
 import UserActions from './UserActions'
+import Avatar from '../Avatar'
 
 const ArticleMeta = ({ article }) => {
   const { author } = article
@@ -16,7 +17,7 @@ const ArticleMeta = ({ article }) => {
       {viewer => (
         <div className="article-meta">
           <Link to={`/profile/${author.username}`}>
-            <img src={author.image} alt={author.username} />
+            <Avatar src={author.image} alt={author.username} />
           </Link>
           <div className="info">
             <Link to={`/profile/${author.username}`} className="author">

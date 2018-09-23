@@ -3,6 +3,7 @@ import gql from 'graphql-tag'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { Link } from 'react-router-dom'
+import Avatar from './Avatar'
 import FavoriteButton from './FavoriteButton'
 
 const ArticlePreview = ({ article }) => {
@@ -12,7 +13,7 @@ const ArticlePreview = ({ article }) => {
     <div className="article-preview">
       <div className="article-meta">
         <Link to={`/profile/${author.username}`}>
-          <img src={author.image} alt={author.username} />
+          <Avatar src={author.image} alt={author.username} />
         </Link>
         <div className="info">
           <Link to={`/profile/${author.username}`} className="author">
