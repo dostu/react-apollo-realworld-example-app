@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
 import React from 'react'
-import { Query } from 'react-apollo'
+import { useQuery } from '@apollo/react-hooks'
 import ApolloInfiniteScroll from '../ApolloInfiniteScroll'
 import ArticlePreview from '../ArticlePreview'
 import { GLOBAL_FEED, TAG_FEED, YOUR_FEED } from './feedTypes'
@@ -43,46 +43,38 @@ const GET_ARTICLES = gql`
   ${ARTICLES_CONNECTION_FRAGMENT}
 `
 
-const Feed = ({ feedType, tag }) => (
-  <Query
-    query={feedType === YOUR_FEED ? GET_FEED : GET_ARTICLES}
-    variables={feedType === TAG_FEED ? { tag } : {}}
-    fetchPolicy="cache-and-network"
-  >
-    {({ loading, error, data, fetchMore }) => {
-      const connectionPath = feedType === YOUR_FEED ? 'viewer.feed' : 'articles'
-      const articles = _.get(data, connectionPath)
+const Feed = ({ feedType, tag }) => {
+  const { loading, data, error, fetchMore } = useQuery(
+    feedType === YOUR_FEED ? GET_FEED : GET_ARTICLES,
+    {
+      variables: feedType === TAG_FEED ? { tag } : {},
+      fetchPolicy: 'cache-and-network'
+    }
+  )
 
-      if (error || !articles) {
-        return (
-          <div className="article-preview">
-            Loading feed...
-          </div>
-        )
-      }
+  const connectionPath = feedType === YOUR_FEED ? 'viewer.feed' : 'articles'
+  const articles = _.get(data, connectionPath)
 
-      if (articles.edges.length === 0) {
-        return (
-          <div className="article-preview">
-            No articles are here... yet.
-          </div>
-        )
-      }
+  if (error || !articles) {
+    return <div className="article-preview">Loading feed...</div>
+  }
 
-      return (
-        <ApolloInfiniteScroll
-          data={data}
-          connectionPath={connectionPath}
-          loading={loading}
-          fetchMore={fetchMore}
-          threshold={500}
-        >
-          {article => <ArticlePreview article={article} key={article.id} />}
-        </ApolloInfiniteScroll>
-      )
-    }}
-  </Query>
-)
+  if (articles.edges.length === 0) {
+    return <div className="article-preview">No articles are here... yet.</div>
+  }
+
+  return (
+    <ApolloInfiniteScroll
+      data={data}
+      connectionPath={connectionPath}
+      loading={loading}
+      fetchMore={fetchMore}
+      threshold={500}
+    >
+      {article => <ArticlePreview article={article} key={article.id} />}
+    </ApolloInfiniteScroll>
+  )
+}
 
 Feed.propTypes = {
   feedType: PropTypes.oneOf([YOUR_FEED, GLOBAL_FEED, TAG_FEED]).isRequired,

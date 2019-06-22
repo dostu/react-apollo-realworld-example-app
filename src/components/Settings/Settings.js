@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
-import React, { Fragment } from 'react'
-import { Mutation, Query } from 'react-apollo'
+import React from 'react'
+import { useQuery, useMutation } from '@apollo/react-hooks'
 import { transformGraphQLErrors } from '../../apolloHelpers'
 import tokenStorage from '../../tokenStorage'
 import Page from '../Page'
@@ -43,58 +43,56 @@ const UPDATE_USER = gql`
   ${USER_FRAGMENT}
 `
 
-const Settings = ({ history }) => (
-  <Page title="Settings" className="settings-page">
-    <div className="container page">
-      <div className="row">
-        <div className="col-md-6 offset-md-3 col-xs-12">
-          <h1 className="text-xs-center">Your Settings</h1>
-          <Query query={GET_VIEWER}>
-            {({ loading, error, data, client }) => {
-              if (loading || error) return 'Loading...'
+const Settings = ({ history }) => {
+  const { loading, data, error, client } = useQuery(GET_VIEWER)
+  const [updateUser] = useMutation(UPDATE_USER)
 
-              return (
-                <Fragment>
-                  <Mutation mutation={UPDATE_USER}>
-                    {updateUser => (
-                      <SettingsForm
-                        user={data.viewer.user}
-                        onSubmit={async (values, { setSubmitting, setErrors }) => {
-                          const { data: mutationData } = await updateUser({
-                            variables: { input: values }
-                          })
+  if (loading || error) return 'Loading...'
+  return (
+    <Page title="Settings" className="settings-page">
+      <div className="container page">
+        <div className="row">
+          <div className="col-md-6 offset-md-3 col-xs-12">
+            <h1 className="text-xs-center">Your Settings</h1>
 
-                          setSubmitting(false)
-                          setErrors(transformGraphQLErrors(mutationData.updateUser.errors))
+            <SettingsForm
+              user={data.viewer.user}
+              onSubmit={async (values, { setSubmitting, setErrors }) => {
+                const { data: mutationData } = await updateUser({
+                  variables: { input: values }
+                })
 
-                          if (!_.isEmpty(mutationData.updateUser.errors)) return
+                setSubmitting(false)
+                setErrors(
+                  transformGraphQLErrors(mutationData.updateUser.errors)
+                )
 
-                          history.push(`/profile/${mutationData.updateUser.user.username}`)
-                        }}
-                      />
-                    )}
-                  </Mutation>
-                  <hr />
-                  <button
-                    type="button"
-                    className="btn btn-outline-danger"
-                    onClick={() => {
-                      tokenStorage.delete()
-                      client.cache.reset()
-                      history.push('/')
-                    }}
-                  >
-                    Or click here to logout.
-                  </button>
-                </Fragment>
-              )
-            }}
-          </Query>
+                if (!_.isEmpty(mutationData.updateUser.errors)) return
+
+                history.push(
+                  `/profile/${mutationData.updateUser.user.username}`
+                )
+              }}
+            />
+
+            <hr />
+            <button
+              type="button"
+              className="btn btn-outline-danger"
+              onClick={() => {
+                tokenStorage.delete()
+                client.cache.reset()
+                history.push('/')
+              }}
+            >
+              Or click here to logout.
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  </Page>
-)
+    </Page>
+  )
+}
 
 Settings.propTypes = {
   history: PropTypes.shape({

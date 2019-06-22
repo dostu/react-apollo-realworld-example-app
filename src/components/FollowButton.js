@@ -2,9 +2,9 @@ import classNames from 'classnames'
 import gql from 'graphql-tag'
 import PropTypes from 'prop-types'
 import React from 'react'
-import { Mutation } from 'react-apollo'
+import { useMutation } from '@apollo/react-hooks'
 import { withRouter } from 'react-router-dom'
-import WithViewer from './WithViewer'
+import useViewer from './useViewer'
 
 const FOLLOW_USER = gql`
   mutation FollowUser($input: FollowUserInput!) {
@@ -34,37 +34,36 @@ const UNFOLLOW_USER = gql`
   }
 `
 
-const FollowButton = ({ user, className, history }) => (
-  <WithViewer>
-    {viewer => (
-      <Mutation mutation={user.followedByViewer ? UNFOLLOW_USER : FOLLOW_USER}>
-        {mutate => (
-          <button
-            type="button"
-            className={classNames(
-              'btn btn-sm',
-              user.followedByViewer ? 'btn-secondary' : 'btn-outline-secondary',
-              className
-            )}
-            onClick={() => {
-              if (!viewer) {
-                history.push('/register')
-                return
-              }
-              mutate({ variables: { input: { id: user.id } } })
-            }}
-          >
-            <i className="ion-plus-round" />
-            &nbsp;
-            {user.followedByViewer ? 'Unfollow' : 'Follow'} {user.username}
-            &nbsp;
-            <span className="counter">({user.followers.totalCount})</span>
-          </button>
-        )}
-      </Mutation>
-    )}
-  </WithViewer>
-)
+const FollowButton = ({ user, className, history }) => {
+  const viewer = useViewer()
+  const [toggleFollow] = useMutation(
+    user.followedByViewer ? UNFOLLOW_USER : FOLLOW_USER
+  )
+
+  return (
+    <button
+      type="button"
+      className={classNames(
+        'btn btn-sm',
+        user.followedByViewer ? 'btn-secondary' : 'btn-outline-secondary',
+        className
+      )}
+      onClick={() => {
+        if (!viewer) {
+          history.push('/register')
+          return
+        }
+        toggleFollow({ variables: { input: { id: user.id } } })
+      }}
+    >
+      <i className="ion-plus-round" />
+      &nbsp;
+      {user.followedByViewer ? 'Unfollow' : 'Follow'} {user.username}
+      &nbsp;
+      <span className="counter">({user.followers.totalCount})</span>
+    </button>
+  )
+}
 
 FollowButton.propTypes = {
   user: PropTypes.shape({

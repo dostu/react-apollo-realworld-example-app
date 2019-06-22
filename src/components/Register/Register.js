@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
 import React from 'react'
-import { Mutation } from 'react-apollo'
+import { useMutation } from '@apollo/react-hooks'
 import { Link } from 'react-router-dom'
 import { transformGraphQLErrors } from '../../apolloHelpers'
 import Page from '../Page'
@@ -18,36 +18,38 @@ const CREATE_USER = gql`
   }
 `
 
-const Register = ({ history }) => (
-  <Page title="Sign up" className="auth-page">
-    <div className="container page">
-      <div className="row">
-        <div className="col-md-6 offset-md-3 col-xs-12">
-          <h1 className="text-xs-center">Sign up</h1>
-          <p className="text-xs-center">
-            <Link to="/login">Have an account?</Link>
-          </p>
-          <Mutation mutation={CREATE_USER}>
-            {createUser => (
-              <Form
-                onSubmit={async (values, { setSubmitting, setErrors }) => {
-                  const { data } = await createUser({ variables: { input: values } })
+const Register = ({ history }) => {
+  const [createUser] = useMutation(CREATE_USER)
 
-                  setSubmitting(false)
-                  setErrors(transformGraphQLErrors(data.createUser.errors))
+  return (
+    <Page title="Sign up" className="auth-page">
+      <div className="container page">
+        <div className="row">
+          <div className="col-md-6 offset-md-3 col-xs-12">
+            <h1 className="text-xs-center">Sign up</h1>
+            <p className="text-xs-center">
+              <Link to="/login">Have an account?</Link>
+            </p>
+            <Form
+              onSubmit={async (values, { setSubmitting, setErrors }) => {
+                const { data } = await createUser({
+                  variables: { input: values }
+                })
 
-                  if (!_.isEmpty(data.createUser.errors)) return
+                setSubmitting(false)
+                setErrors(transformGraphQLErrors(data.createUser.errors))
 
-                  history.push('/login')
-                }}
-              />
-            )}
-          </Mutation>
+                if (!_.isEmpty(data.createUser.errors)) return
+
+                history.push('/login')
+              }}
+            />
+          </div>
         </div>
       </div>
-    </div>
-  </Page>
-)
+    </Page>
+  )
+}
 
 Register.propTypes = {
   history: PropTypes.shape({

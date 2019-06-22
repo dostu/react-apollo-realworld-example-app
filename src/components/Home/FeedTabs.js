@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 import React, { Fragment } from 'react'
-import { Mutation, Query } from 'react-apollo'
+import { useQuery, useMutation } from '@apollo/react-hooks'
 import Tab from '../Tab'
-import WithViewer from '../WithViewer'
+import useViewer from '../useViewer'
 import Feed from './Feed'
 import { GLOBAL_FEED, TAG_FEED, YOUR_FEED } from './feedTypes'
 
@@ -25,53 +25,47 @@ const CHANGE_FEED_FILTER = gql`
 `
 /* eslint-enable */
 
-const FeedTabs = () => (
-  <WithViewer>
-    {viewer => (
-      <Query query={GET_FEED_FILTER}>
-        {({ data, loading, error }) => {
-          if (error || loading) return null
+const FeedTabs = () => {
+  const { loading, data, error } = useQuery(GET_FEED_FILTER)
+  const viewer = useViewer()
+  const [changeFeedFilter] = useMutation(CHANGE_FEED_FILTER)
 
-          const feedType = data.feedFilter.type || (viewer ? YOUR_FEED : GLOBAL_FEED)
-          const { tag } = data.feedFilter
+  if (error || loading) return null
 
-          return (
-            <Fragment>
-              <div className="feed-toggle">
-                <Mutation mutation={CHANGE_FEED_FILTER}>
-                  {changeFeedFilter => (
-                    <ul className="nav nav-pills outline-active">
-                      {viewer && (
-                        <Tab
-                          active={feedType === YOUR_FEED}
-                          onClick={() => changeFeedFilter({ variables: { type: YOUR_FEED } })}
-                        >
-                          Your Feed
-                        </Tab>
-                      )}
+  const feedType = data.feedFilter.type || (viewer ? YOUR_FEED : GLOBAL_FEED)
+  const { tag } = data.feedFilter
 
-                      <Tab
-                        active={feedType === GLOBAL_FEED}
-                        onClick={() => changeFeedFilter({ variables: { type: GLOBAL_FEED } })}
-                      >
-                        Global Feed
-                      </Tab>
+  return (
+    <Fragment>
+      <div className="feed-toggle">
+        <ul className="nav nav-pills outline-active">
+          {viewer && (
+            <Tab
+              active={feedType === YOUR_FEED}
+              onClick={() =>
+                changeFeedFilter({ variables: { type: YOUR_FEED } })
+              }
+            >
+              Your Feed
+            </Tab>
+          )}
 
-                      {feedType === TAG_FEED && (
-                        <Tab active>#{tag}</Tab>
-                      )}
-                    </ul>
-                  )}
-                </Mutation>
-              </div>
+          <Tab
+            active={feedType === GLOBAL_FEED}
+            onClick={() =>
+              changeFeedFilter({ variables: { type: GLOBAL_FEED } })
+            }
+          >
+            Global Feed
+          </Tab>
 
-              <Feed feedType={feedType} tag={tag} />
-            </Fragment>
-          )
-        }}
-      </Query>
-    )}
-  </WithViewer>
-)
+          {feedType === TAG_FEED && <Tab active>#{tag}</Tab>}
+        </ul>
+      </div>
+
+      <Feed feedType={feedType} tag={tag} />
+    </Fragment>
+  )
+}
 
 export default FeedTabs

@@ -2,12 +2,12 @@ import gql from 'graphql-tag'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
 import React from 'react'
-import { Mutation } from 'react-apollo'
+import { useMutation } from '@apollo/react-hooks'
 import { Link } from 'react-router-dom'
 import { transformGraphQLErrors } from '../../apolloHelpers'
 import tokenStorage from '../../tokenStorage'
 import Page from '../Page'
-import WithViewer from '../WithViewer'
+import { WithViewer } from '../useViewer'
 import LoginForm from './Form'
 
 const SIGN_IN_USER = gql`
@@ -34,45 +34,48 @@ const GET_VIEWER = gql`
   ${WithViewer.fragments.viewer}
 `
 
-const Login = ({ history }) => (
-  <Page title="Sign in" className="auth-page">
-    <div className="container page">
-      <div className="row">
-        <div className="col-md-6 offset-md-3 col-xs-12">
-          <h1 className="text-xs-center">Sign in</h1>
-          <p className="text-xs-center">
-            <Link to="/register">Need an account?</Link>
-          </p>
-          <Mutation
-            mutation={SIGN_IN_USER}
-            update={(cache, { data: mutationData }) => {
-              cache.writeQuery({
-                query: GET_VIEWER,
-                data: { viewer: mutationData.signInUser.viewer }
-              })
-            }}
-          >
-            {signInUser => (
-              <LoginForm
-                onSubmit={async (values, { setSubmitting, setErrors }) => {
-                  const { data: mutationData } = await signInUser({ variables: { input: values } })
+const Login = ({ history }) => {
+  const [signInUser] = useMutation(SIGN_IN_USER, {
+    update: (cache, { data: mutationData }) => {
+      cache.writeQuery({
+        query: GET_VIEWER,
+        data: { viewer: mutationData.signInUser.viewer }
+      })
+    }
+  })
+  return (
+    <Page title="Sign in" className="auth-page">
+      <div className="container page">
+        <div className="row">
+          <div className="col-md-6 offset-md-3 col-xs-12">
+            <h1 className="text-xs-center">Sign in</h1>
+            <p className="text-xs-center">
+              <Link to="/register">Need an account?</Link>
+            </p>
 
-                  setSubmitting(false)
-                  setErrors(transformGraphQLErrors(mutationData.signInUser.errors))
+            <LoginForm
+              onSubmit={async (values, { setSubmitting, setErrors }) => {
+                const { data: mutationData } = await signInUser({
+                  variables: { input: values }
+                })
 
-                  if (!_.isEmpty(mutationData.signInUser.errors)) return
+                setSubmitting(false)
+                setErrors(
+                  transformGraphQLErrors(mutationData.signInUser.errors)
+                )
 
-                  tokenStorage.write(mutationData.signInUser.token)
-                  history.push('/')
-                }}
-              />
-            )}
-          </Mutation>
+                if (!_.isEmpty(mutationData.signInUser.errors)) return
+
+                tokenStorage.write(mutationData.signInUser.token)
+                history.push('/')
+              }}
+            />
+          </div>
         </div>
       </div>
-    </div>
-  </Page>
-)
+    </Page>
+  )
+}
 
 Login.propTypes = {
   history: PropTypes.shape({

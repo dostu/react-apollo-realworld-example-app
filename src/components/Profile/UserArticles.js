@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
 import React from 'react'
-import { Query } from 'react-apollo'
+import { useQuery } from '@apollo/react-hooks'
 import ApolloInfiniteScroll from '../ApolloInfiniteScroll'
 import ArticlePreview from '../ArticlePreview'
 
@@ -49,45 +49,34 @@ const GET_FAVORITE_ARTICLES = gql`
   ${ARTICLES_CONNECTION_FRAGMENT}
 `
 
-const UserArticles = ({ username, type }) => (
-  <Query
-    query={type === FAVORITED_ARTICLES ? GET_FAVORITE_ARTICLES : GET_USER_ARTICLES}
-    variables={{ username }}
-    fetchPolicy="cache-and-network"
-  >
-    {({ loading, error, data, fetchMore }) => {
-      const articles = _.get(data, 'user.articles')
+const UserArticles = ({ username, type }) => {
+  const { loading, data, error, fetchMore } = useQuery(
+    type === FAVORITED_ARTICLES ? GET_FAVORITE_ARTICLES : GET_USER_ARTICLES,
+    { variables: { username }, fetchPolicy: 'cache-and-network' }
+  )
 
-      if (error || !articles) {
-        return (
-          <div className="article-preview">
-            Loading articles...
-          </div>
-        )
-      }
+  const articles = _.get(data, 'user.articles')
 
-      if (articles.edges.length === 0) {
-        return (
-          <div className="article-preview">
-            No articles are here... yet.
-          </div>
-        )
-      }
+  if (error || !articles) {
+    return <div className="article-preview">Loading articles...</div>
+  }
 
-      return (
-        <ApolloInfiniteScroll
-          data={data}
-          connectionPath="user.articles"
-          loading={loading}
-          fetchMore={fetchMore}
-          threshold={500}
-        >
-          {article => <ArticlePreview article={article} key={article.id} />}
-        </ApolloInfiniteScroll>
-      )
-    }}
-  </Query>
-)
+  if (articles.edges.length === 0) {
+    return <div className="article-preview">No articles are here... yet.</div>
+  }
+
+  return (
+    <ApolloInfiniteScroll
+      data={data}
+      connectionPath="user.articles"
+      loading={loading}
+      fetchMore={fetchMore}
+      threshold={500}
+    >
+      {article => <ArticlePreview article={article} key={article.id} />}
+    </ApolloInfiniteScroll>
+  )
+}
 
 UserArticles.propTypes = {
   username: PropTypes.string.isRequired,
