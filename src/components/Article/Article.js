@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 import PropTypes from 'prop-types'
-import React, { Fragment } from 'react'
-import { Query } from 'react-apollo'
+import React from 'react'
+import { useQuery } from '@apollo/react-hooks'
 import Helmet from 'react-helmet'
 import ReactMarkdown from 'react-markdown'
 import Page from '../Page'
@@ -23,51 +23,52 @@ const GET_ARTICLE = gql`
   ${ArticleMeta.fragments.article}
 `
 
-const Article = ({ match: { params: { slug } } }) => (
-  <Page title="Article" className="article-page">
-    <Query query={GET_ARTICLE} variables={{ slug }}>
-      {({ loading, error, data }) => {
-        if (loading || error) return null
+const Article = ({
+  match: {
+    params: { slug }
+  }
+}) => {
+  const { loading, data, error } = useQuery(GET_ARTICLE, {
+    variables: { slug }
+  })
+  if (loading || error) return null
 
-        const { article, viewer } = data
+  const { article, viewer } = data
 
-        return (
-          <Fragment>
-            <Helmet title={article.title} />
+  return (
+    <Page title="Article" className="article-page">
+      <Helmet title={article.title} />
 
-            <div className="banner">
-              <div className="container">
-                <h1>{article.title}</h1>
-                <ArticleMeta article={article} viewer={viewer} />
-              </div>
-            </div>
+      <div className="banner">
+        <div className="container">
+          <h1>{article.title}</h1>
+          <ArticleMeta article={article} viewer={viewer} />
+        </div>
+      </div>
 
-            <div className="container page">
-              <div className="row article-content">
-                <div className="col-md-12">
-                  <ReactMarkdown source={article.body} />
-                  <TagList tagList={article.tagList} />
-                </div>
-              </div>
+      <div className="container page">
+        <div className="row article-content">
+          <div className="col-md-12">
+            <ReactMarkdown source={article.body} />
+            <TagList tagList={article.tagList} />
+          </div>
+        </div>
 
-              <hr />
+        <hr />
 
-              <div className="article-actions">
-                <ArticleMeta article={article} viewer={viewer} />
-              </div>
+        <div className="article-actions">
+          <ArticleMeta article={article} viewer={viewer} />
+        </div>
 
-              <div className="row">
-                <div className="col-xs-12 col-md-8 offset-md-2">
-                  <ArticleComments slug={article.slug} />
-                </div>
-              </div>
-            </div>
-          </Fragment>
-        )
-      }}
-    </Query>
-  </Page>
-)
+        <div className="row">
+          <div className="col-xs-12 col-md-8 offset-md-2">
+            <ArticleComments slug={article.slug} />
+          </div>
+        </div>
+      </div>
+    </Page>
+  )
+}
 
 Article.propTypes = {
   match: PropTypes.shape({

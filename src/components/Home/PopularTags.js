@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 import React, { Fragment } from 'react'
-import { Mutation, Query } from 'react-apollo'
+import { useQuery, useMutation } from '@apollo/react-hooks'
 import Tag from './Tag'
 import { TAG_FEED } from './feedTypes'
 
@@ -18,35 +18,30 @@ const CHANGE_FEED_FILTER = gql`
 `
 /* eslint-enable */
 
-const PopularTags = () => (
-  <Fragment>
-    <p>Popular Tags</p>
-    <Query
-      query={GET_TAGS}
-      fetchPolicy="cache-and-network"
-    >
-      {({ loading, error, data }) => {
-        if (loading || error) return 'Loading tags...'
+const PopularTags = () => {
+  const { loading, data, error } = useQuery(GET_TAGS, {
+    fetchPolicy: 'cache-and-network'
+  })
+  const [changeFeedFilter] = useMutation(CHANGE_FEED_FILTER)
 
-        return (
-          <Mutation mutation={CHANGE_FEED_FILTER}>
-            {changeFeedFilter => (
-              <div className="tag-list">
-                {data.tags.map(tag => (
-                  <Tag
-                    key={tag}
-                    onClick={() => changeFeedFilter({ variables: { type: TAG_FEED, tag } })}
-                  >
-                    {tag}
-                  </Tag>
-                ))}
-              </div>
-            )}
-          </Mutation>
-        )
-      }}
-    </Query>
-  </Fragment>
-)
+  if (loading || error) return 'Loading tags...'
+  return (
+    <Fragment>
+      <p>Popular Tags</p>
+      <div className="tag-list">
+        {data.tags.map(tag => (
+          <Tag
+            key={tag}
+            onClick={() =>
+              changeFeedFilter({ variables: { type: TAG_FEED, tag } })
+            }
+          >
+            {tag}
+          </Tag>
+        ))}
+      </div>
+    </Fragment>
+  )
+}
 
 export default PopularTags

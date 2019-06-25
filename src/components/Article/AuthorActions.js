@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 import PropTypes from 'prop-types'
 import React, { Fragment } from 'react'
-import { Mutation } from 'react-apollo'
+import { useMutation } from '@apollo/react-hooks'
 import { Link, withRouter } from 'react-router-dom'
 
 const DELETE_ARTICLE = gql`
@@ -14,32 +14,34 @@ const DELETE_ARTICLE = gql`
   }
 `
 
-const AuthorActions = ({ history, article }) => (
-  <Fragment>
-    <Link to={`/editor/${article.slug}`} className="btn btn-sm btn-outline-secondary">
-      <i className="ion-edit" />
+const AuthorActions = ({ history, article }) => {
+  const [deleteArticle] = useMutation(DELETE_ARTICLE, {
+    onCompleted: () => history.push('/')
+  })
+
+  return (
+    <Fragment>
+      <Link
+        to={`/editor/${article.slug}`}
+        className="btn btn-sm btn-outline-secondary"
+      >
+        <i className="ion-edit" />
+        &nbsp; Edit Article
+      </Link>
       &nbsp;
-      Edit Article
-    </Link>
-    &nbsp;
-    <Mutation
-      mutation={DELETE_ARTICLE}
-      onCompleted={() => history.push('/')}
-    >
-      {deleteArticle => (
-        <button
-          type="button"
-          className="btn btn-sm btn-outline-danger"
-          onClick={() => deleteArticle({ variables: { input: { id: article.id } } })}
-        >
-          <i className="ion-trash-a" />
-          &nbsp;
-          Delete Article
-        </button>
-      )}
-    </Mutation>
-  </Fragment>
-)
+      <button
+        type="button"
+        className="btn btn-sm btn-outline-danger"
+        onClick={() =>
+          deleteArticle({ variables: { input: { id: article.id } } })
+        }
+      >
+        <i className="ion-trash-a" />
+        &nbsp; Delete Article
+      </button>
+    </Fragment>
+  )
+}
 
 AuthorActions.propTypes = {
   article: PropTypes.shape({

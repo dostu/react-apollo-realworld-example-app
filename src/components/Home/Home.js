@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import { withApollo } from 'react-apollo'
+import { withApollo } from '@apollo/react-hoc'
 import Page from '../Page'
 import FeedTabs from './FeedTabs'
 import PopularTags from './PopularTags'
