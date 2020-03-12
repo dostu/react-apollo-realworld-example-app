@@ -2,12 +2,12 @@ import gql from 'graphql-tag'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
 import React, { Fragment } from 'react'
-import { Query } from 'react-apollo'
+import { useQuery } from '@apollo/react-hooks'
 import { Link } from 'react-router-dom'
 import Avatar from '../Avatar'
 import FollowButton from '../FollowButton'
 import Page from '../Page'
-import WithViewer from '../WithViewer'
+import useViewer from '../useViewer'
 import ArticleTabs from './ArticleTabs'
 
 const GET_PROFILE = gql`
@@ -26,43 +26,45 @@ const GET_PROFILE = gql`
 const EditSettingsLink = () => (
   <Link to="/settings" className="btn btn-sm btn-outline-secondary action-btn">
     <i className="ion-gear-a" />
-    &nbsp;
-    Edit Profile Settings
+    &nbsp; Edit Profile Settings
   </Link>
 )
 
-const Profile = ({ username }) => (
-  <Query query={GET_PROFILE} variables={{ username }}>
-    {({ loading, error, data }) => {
-      if (loading || error) return null
+const Profile = ({ username }) => {
+  const {
+    loading,
+    data: { user },
+    error
+  } = useQuery(GET_PROFILE, {
+    variables: { username }
+  })
+  const viewer = useViewer()
 
-      const { user } = data
+  if (loading || error) return null
+  return (
+    <Fragment>
+      <Avatar src={user.image} className="user-img" alt="" />
+      <h4>{user.username}</h4>
+      <p>{user.bio}</p>
 
-      return (
-        <WithViewer>
-          {viewer => (
-            <Fragment>
-              <Avatar src={user.image} className="user-img" alt="" />
-              <h4>{user.username}</h4>
-              <p>{user.bio}</p>
-
-              {_.get(viewer, 'user.id') === user.id
-                ? <EditSettingsLink />
-                : <FollowButton user={user} className="action-btn" />
-              }
-            </Fragment>
-          )}
-        </WithViewer>
-      )
-    }}
-  </Query>
-)
+      {_.get(viewer, 'user.id') === user.id ? (
+        <EditSettingsLink />
+      ) : (
+        <FollowButton user={user} className="action-btn" />
+      )}
+    </Fragment>
+  )
+}
 
 Profile.propTypes = {
   username: PropTypes.string.isRequired
 }
 
-const ProfilePage = ({ match: { params: { username } } }) => (
+const ProfilePage = ({
+  match: {
+    params: { username }
+  }
+}) => (
   <Page title={`@${username}`} className="profile-page">
     <div className="user-info">
       <div className="container">

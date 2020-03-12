@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
 import React from 'react'
-import { Mutation, Query } from 'react-apollo'
+import { useMutation, useQuery } from '@apollo/react-hooks'
 import { transformGraphQLErrors } from '../apolloHelpers'
 import Editor from './Editor'
 import Page from './Page'
@@ -38,41 +38,40 @@ const UPDATE_ARTICLE = gql`
   }
 `
 
-const EditArticle = ({ history, match: { params: { slug } } }) => (
-  <Page title="Editor" className="editor-page">
-    <Query
-      query={GET_ARTICLE}
-      variables={{ slug }}
-    >
-      {({ loading, error, data }) => {
-        if (loading || error) return null
+const EditArticle = ({
+  history,
+  match: {
+    params: { slug }
+  }
+}) => {
+  const { loading, data, error } = useQuery(GET_ARTICLE, {
+    variables: { slug }
+  })
+  const [updateArticle] = useMutation(UPDATE_ARTICLE)
 
-        return (
-          <Mutation mutation={UPDATE_ARTICLE}>
-            {updateArticle => (
-              <Editor
-                article={data.article}
-                onSubmit={async (values, { setSubmitting, setErrors }) => {
-                  const { data: mutationData } = await updateArticle({
-                    variables: { input: { ...values, id: data.article.id } }
-                  })
+  if (loading || error) return null
 
-                  setSubmitting(false)
-                  setErrors(transformGraphQLErrors(mutationData.updateArticle.errors))
+  return (
+    <Page title="Editor" className="editor-page">
+      <Editor
+        article={data.article}
+        onSubmit={async (values, { setSubmitting, setErrors }) => {
+          const { data: mutationData } = await updateArticle({
+            variables: { input: { ...values, id: data.article.id } }
+          })
 
-                  if (!_.isEmpty(mutationData.updateArticle.errors)) return
+          setSubmitting(false)
+          setErrors(transformGraphQLErrors(mutationData.updateArticle.errors))
 
-                  const updatedSlug = _.get(mutationData, 'updateArticle.article.slug')
-                  history.push(`/article/${updatedSlug}`)
-                }}
-              />
-            )}
-          </Mutation>
-        )
-      }}
-    </Query>
-  </Page>
-)
+          if (!_.isEmpty(mutationData.updateArticle.errors)) return
+
+          const updatedSlug = _.get(mutationData, 'updateArticle.article.slug')
+          history.push(`/article/${updatedSlug}`)
+        }}
+      />
+    </Page>
+  )
+}
 
 EditArticle.propTypes = {
   history: PropTypes.shape({

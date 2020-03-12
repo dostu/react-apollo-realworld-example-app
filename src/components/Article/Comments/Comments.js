@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 import PropTypes from 'prop-types'
 import React, { Fragment } from 'react'
-import { Query } from 'react-apollo'
+import { useQuery } from '@apollo/react-hooks'
 import Comment from './Comment'
 import NewComment from './NewComment'
 
@@ -28,44 +28,44 @@ const DELETE_COMMENT = gql`
   }
 `
 
-const ArticleComments = ({ slug }) => (
-  <Query query={GET_ARTICLE_COMMENTS} variables={{ slug }}>
-    {({ loading, error, data, client }) => {
-      if (loading || error) return 'Loading comments...'
+const ArticleComments = ({ slug }) => {
+  const { loading, data, error, client } = useQuery(GET_ARTICLE_COMMENTS, {
+    variables: { slug }
+  })
 
-      return (
-        <Fragment>
-          <NewComment article={data.article} />
+  if (loading || error) return 'Loading comments...'
 
-          {data.article.comments.map(comment => (
-            <Comment
-              key={comment.id}
-              comment={comment}
-              onDelete={async () => {
-                const result = await client.mutate({
-                  mutation: DELETE_COMMENT,
-                  variables: { input: { id: comment.id } }
-                })
-                const deletedCommentId = result.data.deleteComment.comment.id
-                const cacheData = client.readQuery({
-                  query: GET_ARTICLE_COMMENTS,
-                  variables: { slug }
-                })
-                cacheData.article.comments = cacheData.article.comments.filter(
-                  x => x.id !== deletedCommentId
-                )
-                client.writeQuery({
-                  query: GET_ARTICLE_COMMENTS,
-                  data: cacheData
-                })
-              }}
-            />
-          ))}
-        </Fragment>
-      )
-    }}
-  </Query>
-)
+  return (
+    <Fragment>
+      <NewComment article={data.article} />
+
+      {data.article.comments.map(comment => (
+        <Comment
+          key={comment.id}
+          comment={comment}
+          onDelete={async () => {
+            const result = await client.mutate({
+              mutation: DELETE_COMMENT,
+              variables: { input: { id: comment.id } }
+            })
+            const deletedCommentId = result.data.deleteComment.comment.id
+            const cacheData = client.readQuery({
+              query: GET_ARTICLE_COMMENTS,
+              variables: { slug }
+            })
+            cacheData.article.comments = cacheData.article.comments.filter(
+              x => x.id !== deletedCommentId
+            )
+            client.writeQuery({
+              query: GET_ARTICLE_COMMENTS,
+              data: cacheData
+            })
+          }}
+        />
+      ))}
+    </Fragment>
+  )
+}
 
 ArticleComments.propTypes = {
   slug: PropTypes.string.isRequired
