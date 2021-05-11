@@ -14,7 +14,7 @@
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
     "immutability-helper": "^2.7.1",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.21",
     "prop-types": "^15.6.2",
     "raven-js": "^3.26.3",
     "react": "^16.8",
