@@ -24,10 +24,11 @@ const GET_VIEWER = gql`
 `
 
 const useViewer = () => {
-  const {
-    data: { viewer }
-  } = useQuery(GET_VIEWER)
-  return viewer
+  const { loading, data } = useQuery(GET_VIEWER)
+
+  if (loading) { return null }
+
+  return data.viewer
 }
 
 WithViewer.fragments = {

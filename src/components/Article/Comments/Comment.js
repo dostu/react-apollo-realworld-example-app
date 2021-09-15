@@ -21,13 +21,14 @@ const Comment = ({ comment, onDelete }) => {
           {author.username}
         </Link>
         <span className="date-posted">
-          {format(Date.parse(comment.createdAt), 'MMM Do, YYYY')}
+          {format(Date.parse(comment.createdAt), 'MMM do, yyyy')}
         </span>
         <span className="mod-options">
           <i
             className="ion-trash-a"
             role="button"
             tabIndex="0"
+            aria-label="Delete"
             onClick={() => onDelete()}
           />
         </span>

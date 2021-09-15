@@ -14,7 +14,7 @@ import Settings from './Settings'
 const App = () => (
   <ApolloProvider client={apolloClient}>
     <BrowserRouter>
-      <Fragment>
+      <>
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
@@ -25,7 +25,7 @@ const App = () => (
           <Route path="/settings" component={Settings} />
           <Route path="/profile/:username" component={Profile} />
         </Switch>
-      </Fragment>
+      </>
     </BrowserRouter>
   </ApolloProvider>
 )

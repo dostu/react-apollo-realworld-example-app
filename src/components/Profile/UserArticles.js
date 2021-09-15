@@ -73,7 +73,7 @@ const UserArticles = ({ username, type }) => {
       fetchMore={fetchMore}
       threshold={500}
     >
-      {article => <ArticlePreview article={article} key={article.id} />}
+      {(article) => <ArticlePreview article={article} key={article.id} />}
     </ApolloInfiniteScroll>
   )
 }

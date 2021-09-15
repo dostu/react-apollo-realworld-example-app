@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom'
 import Avatar from '../../Avatar'
 
 const UserMenuItems = ({ user }) => (
-  <Fragment>
+  <>
     <li className="nav-item">
       <NavLink exact to="/" className="nav-link">Home</NavLink>
     </li>
@@ -24,7 +24,7 @@ const UserMenuItems = ({ user }) => (
         {user.username}
       </NavLink>
     </li>
-  </Fragment>
+  </>
 )
 
 UserMenuItems.propTypes = {

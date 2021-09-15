@@ -13,7 +13,7 @@ const RegistrationForm = ({ onSubmit }) => (
     onSubmit={onSubmit}
   >
     {({ handleSubmit, isSubmitting, errors }) => (
-      <Fragment>
+      <>
         <form onSubmit={handleSubmit}>
           <FormErrors errors={errors} />
 
@@ -53,7 +53,7 @@ const RegistrationForm = ({ onSubmit }) => (
             </button>
           </fieldset>
         </form>
-      </Fragment>
+      </>
     )}
   </Formik>
 )

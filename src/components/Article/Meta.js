@@ -23,7 +23,7 @@ const ArticleMeta = ({ article }) => {
           {author.username}
         </Link>
         <span className="date">
-          {format(Date.parse(article.createdAt), 'MMMM Do, YYYY')}
+          {format(Date.parse(article.createdAt), 'MMMM do, yyyy')}
         </span>
       </div>
 
@@ -40,6 +40,7 @@ ArticleMeta.propTypes = {
   article: PropTypes.shape({
     createdAt: PropTypes.string.isRequired,
     author: PropTypes.shape({
+      id: PropTypes.string.isRequired,
       username: PropTypes.string.isRequired,
       image: PropTypes.string
     }).isRequired

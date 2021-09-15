@@ -20,7 +20,7 @@ const AuthorActions = ({ history, article }) => {
   })
 
   return (
-    <Fragment>
+    <>
       <Link
         to={`/editor/${article.slug}`}
         className="btn btn-sm btn-outline-secondary"
@@ -32,14 +32,12 @@ const AuthorActions = ({ history, article }) => {
       <button
         type="button"
         className="btn btn-sm btn-outline-danger"
-        onClick={() =>
-          deleteArticle({ variables: { input: { id: article.id } } })
-        }
+        onClick={() => deleteArticle({ variables: { input: { id: article.id } } })}
       >
         <i className="ion-trash-a" />
         &nbsp; Delete Article
       </button>
-    </Fragment>
+    </>
   )
 }
 

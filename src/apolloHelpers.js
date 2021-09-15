@@ -13,6 +13,6 @@ export const mergePaginatedData = (connectionPath, previousData, newData) => (
   )
 )
 
-export const transformGraphQLErrors = userErrors => (
+export const transformGraphQLErrors = (userErrors) => (
   _.chain(userErrors).map('message').toPlainObject().value()
 )

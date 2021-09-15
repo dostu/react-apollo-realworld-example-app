@@ -4,7 +4,10 @@ import Tab from '../Tab'
 import UserArticles, { FAVORITED_ARTICLES, MY_ARTICLES } from './UserArticles'
 
 class ArticleTabs extends Component {
-  state = { tab: MY_ARTICLES }
+  constructor(props) {
+    super(props)
+    this.state = { tab: MY_ARTICLES }
+  }
 
   handleTabClick = (tab) => {
     this.setState({ tab })

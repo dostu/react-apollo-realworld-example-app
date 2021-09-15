@@ -4,20 +4,21 @@ import { Helmet } from 'react-helmet'
 import Footer from './Footer'
 import Header from './Header'
 
-const Page = ({ children, title, ...otherProps }) => (
-  <Fragment>
+const Page = ({ children, title, className }) => (
+  <>
     <Helmet title={`${title} — Conduit`} />
     <Header />
-    <div {...otherProps}>
+    <div className={className}>
       {children}
     </div>
     <Footer />
-  </Fragment>
+  </>
 )
 
 Page.propTypes = {
   children: PropTypes.node.isRequired,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
+  className: PropTypes.string.isRequired
 }
 
 export default Page
