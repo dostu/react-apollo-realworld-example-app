@@ -19,7 +19,7 @@ const ArticlePreview = ({ article }) => {
           <Link to={`/profile/${author.username}`} className="author">
             {author.username}
           </Link>
-          <span className="date">{format(Date.parse(article.createdAt), 'MMMM Do, YYYY')}</span>
+          <span className="date">{format(Date.parse(article.createdAt), 'MMMM do, yyyy')}</span>
         </div>
 
         <FavoriteButton article={article} className="pull-xs-right">

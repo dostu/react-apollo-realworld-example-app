@@ -81,7 +81,7 @@ const Settings = ({ history }) => {
               className="btn btn-outline-danger"
               onClick={() => {
                 tokenStorage.delete()
-                client.cache.reset()
+                client.clearStore()
                 history.push('/')
               }}
             >

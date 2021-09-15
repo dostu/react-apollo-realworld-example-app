@@ -26,21 +26,19 @@ const PopularTags = () => {
 
   if (loading || error) return 'Loading tags...'
   return (
-    <Fragment>
+    <>
       <p>Popular Tags</p>
       <div className="tag-list">
-        {data.tags.map(tag => (
+        {data.tags.map((tag) => (
           <Tag
             key={tag}
-            onClick={() =>
-              changeFeedFilter({ variables: { type: TAG_FEED, tag } })
-            }
+            onClick={() => changeFeedFilter({ variables: { type: TAG_FEED, tag } })}
           >
             {tag}
           </Tag>
         ))}
       </div>
-    </Fragment>
+    </>
   )
 }
 

@@ -18,7 +18,7 @@ const Editor = ({ article, onSubmit }) => (
           onSubmit={onSubmit}
         >
           {({ values, isSubmitting, handleSubmit, setFieldValue, errors }) => (
-            <Fragment>
+            <>
               <FormErrors errors={errors} />
 
               <form onSubmit={handleSubmit}>
@@ -55,7 +55,7 @@ const Editor = ({ article, onSubmit }) => (
                     <TagsInput
                       name="tagList"
                       tagList={values.tagList}
-                      onChange={tagList => setFieldValue('tagList', tagList)}
+                      onChange={(tagList) => setFieldValue('tagList', tagList)}
                       className="form-control"
                       placeholder="Enter tags"
                     />
@@ -65,7 +65,7 @@ const Editor = ({ article, onSubmit }) => (
                   </button>
                 </fieldset>
               </form>
-            </Fragment>
+            </>
           )}
         </Formik>
       </div>

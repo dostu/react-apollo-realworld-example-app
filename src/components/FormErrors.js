@@ -7,7 +7,7 @@ const FormErrors = ({ errors }) => {
 
   return (
     <ul className="error-messages">
-      {Object.values(errors).map(error => <li key={error}>{error}</li>)}
+      {Object.values(errors).map((error) => <li key={error}>{error}</li>)}
     </ul>
   )
 }

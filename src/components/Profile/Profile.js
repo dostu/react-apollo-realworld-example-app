@@ -33,7 +33,7 @@ const EditSettingsLink = () => (
 const Profile = ({ username }) => {
   const {
     loading,
-    data: { user },
+    data,
     error
   } = useQuery(GET_PROFILE, {
     variables: { username }
@@ -41,8 +41,11 @@ const Profile = ({ username }) => {
   const viewer = useViewer()
 
   if (loading || error) return null
+
+  const { user } = data
+
   return (
-    <Fragment>
+    <>
       <Avatar src={user.image} className="user-img" alt="" />
       <h4>{user.username}</h4>
       <p>{user.bio}</p>
@@ -52,7 +55,7 @@ const Profile = ({ username }) => {
       ) : (
         <FollowButton user={user} className="action-btn" />
       )}
-    </Fragment>
+    </>
   )
 }
 

@@ -36,15 +36,13 @@ const FeedTabs = () => {
   const { tag } = data.feedFilter
 
   return (
-    <Fragment>
+    <>
       <div className="feed-toggle">
         <ul className="nav nav-pills outline-active">
           {viewer && (
             <Tab
               active={feedType === YOUR_FEED}
-              onClick={() =>
-                changeFeedFilter({ variables: { type: YOUR_FEED } })
-              }
+              onClick={() => changeFeedFilter({ variables: { type: YOUR_FEED } })}
             >
               Your Feed
             </Tab>
@@ -52,9 +50,7 @@ const FeedTabs = () => {
 
           <Tab
             active={feedType === GLOBAL_FEED}
-            onClick={() =>
-              changeFeedFilter({ variables: { type: GLOBAL_FEED } })
-            }
+            onClick={() => changeFeedFilter({ variables: { type: GLOBAL_FEED } })}
           >
             Global Feed
           </Tab>
@@ -64,7 +60,7 @@ const FeedTabs = () => {
       </div>
 
       <Feed feedType={feedType} tag={tag} />
-    </Fragment>
+    </>
   )
 }
 

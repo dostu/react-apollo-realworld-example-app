@@ -20,40 +20,46 @@ class TagsInput extends Component {
 
   handleDeleteClick = (deletedTag) => {
     const { tagList, onChange } = this.props
-    onChange(tagList.filter(tag => tag !== deletedTag))
+    onChange(tagList.filter((tag) => tag !== deletedTag))
   }
 
   render() {
-    const { tagList, onChange, ...otherProps } = this.props
+    const { tagList, name, className, placeholder } = this.props
 
     return (
-      <Fragment>
+      <>
         <input
           type="text"
           onKeyPress={this.handleKeyPress}
-          {...otherProps}
+          name={name}
+          className={className}
+          placeholder={placeholder}
         />
         <div className="tag-list">
-          {tagList.map(tag => (
+          {tagList.map((tag) => (
             <span key={tag} className="tag-default tag-pill">
               <i
                 className="ion-close-round"
                 role="button"
                 tabIndex="0"
+                aria-label="Delete"
                 onClick={() => this.handleDeleteClick(tag)}
               />
               {tag}
             </span>
           ))}
         </div>
-      </Fragment>
+      </>
     )
   }
 }
 
 TagsInput.propTypes = {
   tagList: PropTypes.arrayOf(PropTypes.string).isRequired,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  className: PropTypes.string.isRequired,
+  placeholder: PropTypes.string.isRequired
 }
 
 export default TagsInput

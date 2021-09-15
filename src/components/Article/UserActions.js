@@ -5,7 +5,7 @@ import FavoriteButton from '../FavoriteButton'
 import FollowButton from '../FollowButton'
 
 const UserActions = ({ article }) => (
-  <Fragment>
+  <>
     <FollowButton user={article.author} />
     &nbsp;&nbsp;
     <FavoriteButton article={article}>
@@ -13,14 +13,14 @@ const UserActions = ({ article }) => (
       &nbsp;
       {article.viewerHasFavorited ? 'Unfavorite' : 'Favorite'} Article ({article.favoritesCount})
     </FavoriteButton>
-  </Fragment>
+  </>
 )
 
 UserActions.propTypes = {
   article: PropTypes.shape({
     viewerHasFavorited: PropTypes.bool.isRequired,
     favoritesCount: PropTypes.number.isRequired,
-    author: PropTypes.object.isRequired
+    author: PropTypes.PropTypes.shape({}).isRequired
   }).isRequired
 }
 

@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 import PropTypes from 'prop-types'
 import React, { Fragment } from 'react'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery, useMutation } from '@apollo/react-hooks'
 import Comment from './Comment'
 import NewComment from './NewComment'
 
@@ -29,41 +29,41 @@ const DELETE_COMMENT = gql`
 `
 
 const ArticleComments = ({ slug }) => {
-  const { loading, data, error, client } = useQuery(GET_ARTICLE_COMMENTS, {
+  const { loading, data, error } = useQuery(GET_ARTICLE_COMMENTS, {
     variables: { slug }
   })
 
   if (loading || error) return 'Loading comments...'
 
+  const [deleteComment] = useMutation(DELETE_COMMENT, {
+    update(cache, { data: { deleteComment: { comment } } }) {
+      const deletedCommentId = comment.id
+      const cacheData = cache.readQuery({
+        query: GET_ARTICLE_COMMENTS,
+        variables: { slug }
+      })
+      cacheData.article.comments = cacheData.article.comments.filter(
+        (x) => x.id !== deletedCommentId
+      )
+      cache.writeQuery({
+        query: GET_ARTICLE_COMMENTS,
+        data: cacheData
+      })
+    }
+  })
+
   return (
-    <Fragment>
+    <>
       <NewComment article={data.article} />
 
-      {data.article.comments.map(comment => (
+      {data.article.comments.map((comment) => (
         <Comment
           key={comment.id}
           comment={comment}
-          onDelete={async () => {
-            const result = await client.mutate({
-              mutation: DELETE_COMMENT,
-              variables: { input: { id: comment.id } }
-            })
-            const deletedCommentId = result.data.deleteComment.comment.id
-            const cacheData = client.readQuery({
-              query: GET_ARTICLE_COMMENTS,
-              variables: { slug }
-            })
-            cacheData.article.comments = cacheData.article.comments.filter(
-              x => x.id !== deletedCommentId
-            )
-            client.writeQuery({
-              query: GET_ARTICLE_COMMENTS,
-              data: cacheData
-            })
-          }}
+          onDelete={() => deleteComment({ variables: { input: { id: comment.id } } })}
         />
       ))}
-    </Fragment>
+    </>
   )
 }
 

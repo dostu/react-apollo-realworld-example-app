@@ -12,7 +12,7 @@ const LoginForm = ({ onSubmit }) => (
     onSubmit={onSubmit}
   >
     {({ handleSubmit, isSubmitting, errors }) => (
-      <Fragment>
+      <>
         <FormErrors errors={errors} />
 
         <form onSubmit={handleSubmit}>
@@ -42,7 +42,7 @@ const LoginForm = ({ onSubmit }) => (
             </button>
           </fieldset>
         </form>
-      </Fragment>
+      </>
     )}
   </Formik>
 )

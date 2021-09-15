@@ -3,7 +3,7 @@ import React from 'react'
 
 const TagList = ({ tagList }) => (
   <ul className="tag-list">
-    {tagList.map(tag => (
+    {tagList.map((tag) => (
       <li key={tag} className="tag-default tag-pill tag-outline">{tag}</li>
     ))}
   </ul>

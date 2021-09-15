@@ -15,7 +15,7 @@ const SettingsForm = ({ user, onSubmit }) => (
     onSubmit={onSubmit}
   >
     {({ handleSubmit, isSubmitting, errors }) => (
-      <Fragment>
+      <>
         <FormErrors errors={errors} />
 
         <form onSubmit={handleSubmit}>
@@ -72,7 +72,7 @@ const SettingsForm = ({ user, onSubmit }) => (
             </button>
           </fieldset>
         </form>
-      </Fragment>
+      </>
     )}
   </Formik>
 )
